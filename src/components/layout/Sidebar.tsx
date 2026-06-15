@@ -10,7 +10,7 @@ import {
   Dumbbell,
   TrendingUp,
   User,
-  LogOut,
+  RotateCcw,
   Activity
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -29,10 +29,16 @@ export function Sidebar() {
   const router = useRouter()
   const supabase = createClient()
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut()
-    router.push('/login')
-    router.refresh()
+  const handleResetDemo = () => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('fitlogic_user')
+      localStorage.removeItem('fitlogic_profile')
+      localStorage.removeItem('fitlogic_workouts')
+      localStorage.removeItem('fitlogic_bmi')
+      localStorage.removeItem('fitlogic_calories')
+      document.cookie = "fitlogic_user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;"
+      window.location.href = '/'
+    }
   }
 
   return (
@@ -72,11 +78,11 @@ export function Sidebar() {
 
         <div className="p-4 border-t border-neutral-900">
           <button
-            onClick={handleLogout}
-            className="w-full flex items-center px-4 py-3 text-sm font-semibold rounded-xl text-red-400 hover:bg-red-500/5 hover:text-red-300 transition-all duration-200 gap-3 cursor-pointer"
+            onClick={handleResetDemo}
+            className="w-full flex items-center px-4 py-3 text-sm font-semibold rounded-xl text-amber-500 hover:bg-amber-500/5 hover:text-amber-400 transition-all duration-200 gap-3 cursor-pointer"
           >
-            <LogOut className="h-5 w-5" />
-            Log Out
+            <RotateCcw className="h-5 w-5" />
+            Reset Demo
           </button>
         </div>
       </aside>

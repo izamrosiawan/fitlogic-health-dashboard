@@ -198,10 +198,61 @@ export const mockSupabase = {
   auth: {
     getUser: async () => {
       if (typeof window === 'undefined') {
-        return { data: { user: null }, error: null }
+        const user = {
+          id: 'demo-user-id',
+          email: 'demo@fitlogic.com',
+          user_metadata: { full_name: 'Demo Student' }
+        }
+        return { data: { user }, error: null }
       }
-      const userStr = localStorage.getItem('fitlogic_user')
-      const user = userStr ? JSON.parse(userStr) : null
+      
+      let userStr = localStorage.getItem('fitlogic_user')
+      if (!userStr) {
+        const defaultUser = {
+          id: 'demo-user-id',
+          email: 'demo@fitlogic.com',
+          user_metadata: { full_name: 'Demo Student' }
+        }
+        localStorage.setItem('fitlogic_user', JSON.stringify(defaultUser))
+        userStr = JSON.stringify(defaultUser)
+        document.cookie = "fitlogic_user=true; path=/"
+        
+        // Seed database objects if missing
+        if (!localStorage.getItem('fitlogic_profile')) {
+          localStorage.setItem('fitlogic_profile', JSON.stringify({
+            id: 'demo-user-id',
+            email: 'demo@fitlogic.com',
+            full_name: 'Demo Student',
+            height: 175,
+            weight: 78.5,
+            target_weight: 72.0,
+            target_calories: 2200
+          }))
+          
+          const today = new Date()
+          const formatD = (offset: number) => {
+            const d = new Date(today)
+            d.setDate(d.getDate() - offset)
+            return d.toISOString().split('T')[0]
+          }
+          localStorage.setItem('fitlogic_workouts', JSON.stringify([
+            { id: '1', name: 'Swimming', duration: 40, calories_burned: 450, date: formatD(0) },
+            { id: '2', name: 'Leg Day Gym Session', duration: 70, calories_burned: 550, date: formatD(1) },
+            { id: '3', name: 'Evening Cycling', duration: 50, calories_burned: 480, date: formatD(2) },
+            { id: '4', name: 'Pull Day Gym Session', duration: 60, calories_burned: 400, date: formatD(3) },
+            { id: '5', name: 'HIIT Cardio', duration: 30, calories_burned: 380, date: formatD(4) }
+          ]))
+          
+          localStorage.setItem('fitlogic_bmi', JSON.stringify([
+            { id: '1', height: 175, weight: 78.5, bmi: 25.6, category: 'Overweight', recorded_at: new Date().toISOString() }
+          ]))
+
+          localStorage.setItem('fitlogic_calories', JSON.stringify([
+            { id: '1', age: 21, gender: 'male', height: 175, weight: 78.5, activity_level: 'moderate', goal: 'lose_slow', bmr: 1740, tdee: 2697, target_calories: 2447, recorded_at: new Date().toISOString() }
+          ]))
+        }
+      }
+      const user = JSON.parse(userStr)
       return { data: { user }, error: null }
     },
     signInWithPassword: async ({ email }: { email: string }) => {
