@@ -194,6 +194,60 @@ class MockQueryBuilder {
   }
 }
 
+function seedAllMockData(email: string, fullName: string) {
+  if (typeof window === 'undefined') return
+
+  localStorage.setItem('fitlogic_profile', JSON.stringify({
+    id: 'demo-user-id',
+    email,
+    full_name: fullName,
+    height: 175,
+    weight: 78.5,
+    target_weight: 72.0,
+    target_calories: 2200
+  }))
+  
+  const today = new Date()
+  const formatD = (offset: number) => {
+    const d = new Date(today)
+    d.setDate(d.getDate() - offset)
+    return d.toISOString().split('T')[0]
+  }
+  const formatISO = (offset: number) => {
+    const d = new Date(today)
+    d.setDate(d.getDate() - offset)
+    return d.toISOString()
+  }
+
+  // Workouts: 8 sessions over the last 7 days (shows high activity/progress)
+  localStorage.setItem('fitlogic_workouts', JSON.stringify([
+    { id: 'w1', name: 'Swimming', duration: 40, calories_burned: 450, date: formatD(0), notes: 'Felt highly energetic' },
+    { id: 'w2', name: 'Leg Day Gym Session', duration: 70, calories_burned: 550, date: formatD(1), notes: 'Squat PR' },
+    { id: 'w3', name: 'Evening Cycling', duration: 50, calories_burned: 480, date: formatD(2), notes: 'Rained a little' },
+    { id: 'w4', name: 'HIIT Cardio', duration: 30, calories_burned: 350, date: formatD(3), notes: 'High intensity session' },
+    { id: 'w5', name: 'Pull Day Gym Session', duration: 60, calories_burned: 400, date: formatD(4), notes: 'Focus on form' },
+    { id: 'w6', name: 'Morning Run', duration: 45, calories_burned: 420, date: formatD(5), notes: 'Stamina improving' },
+    { id: 'w7', name: 'Push Day Gym Session', duration: 65, calories_burned: 460, date: formatD(6), notes: 'Tired but finished' },
+    { id: 'w8', name: 'Yoga and Stretch', duration: 30, calories_burned: 150, date: formatD(7), notes: 'Active recovery' }
+  ]))
+  
+  // BMI Records: weight going down from 82.5 kg to 78.5 kg over 5 weeks (clear progress!)
+  localStorage.setItem('fitlogic_bmi', JSON.stringify([
+    { id: 'b6', height: 175, weight: 78.5, bmi: 25.6, category: 'Overweight', recorded_at: formatISO(0) },
+    { id: 'b5', height: 175, weight: 79.2, bmi: 25.9, category: 'Overweight', recorded_at: formatISO(7) },
+    { id: 'b4', height: 175, weight: 80.1, bmi: 26.2, category: 'Overweight', recorded_at: formatISO(14) },
+    { id: 'b3', height: 175, weight: 80.8, bmi: 26.4, category: 'Overweight', recorded_at: formatISO(21) },
+    { id: 'b2', height: 175, weight: 81.7, bmi: 26.7, category: 'Overweight', recorded_at: formatISO(28) },
+    { id: 'b1', height: 175, weight: 82.5, bmi: 26.9, category: 'Overweight', recorded_at: formatISO(35) }
+  ]))
+
+  // Calories: Mifflin-St Jeor daily budget needs calculators logs showing tracking progress
+  localStorage.setItem('fitlogic_calories', JSON.stringify([
+    { id: 'c2', age: 21, gender: 'male', height: 175, weight: 78.5, activity_level: 'moderate', goal: 'lose_slow', bmr: 1740, tdee: 2697, target_calories: 2447, recorded_at: formatISO(0) },
+    { id: 'c1', age: 21, gender: 'male', height: 175, weight: 80.8, activity_level: 'moderate', goal: 'lose_slow', bmr: 1763, tdee: 2732, target_calories: 2482, recorded_at: formatISO(21) }
+  ]))
+}
+
 export const mockSupabase = {
   auth: {
     getUser: async () => {
@@ -219,37 +273,7 @@ export const mockSupabase = {
         
         // Seed database objects if missing
         if (!localStorage.getItem('fitlogic_profile')) {
-          localStorage.setItem('fitlogic_profile', JSON.stringify({
-            id: 'demo-user-id',
-            email: 'demo@fitlogic.com',
-            full_name: 'Demo Student',
-            height: 175,
-            weight: 78.5,
-            target_weight: 72.0,
-            target_calories: 2200
-          }))
-          
-          const today = new Date()
-          const formatD = (offset: number) => {
-            const d = new Date(today)
-            d.setDate(d.getDate() - offset)
-            return d.toISOString().split('T')[0]
-          }
-          localStorage.setItem('fitlogic_workouts', JSON.stringify([
-            { id: '1', name: 'Swimming', duration: 40, calories_burned: 450, date: formatD(0) },
-            { id: '2', name: 'Leg Day Gym Session', duration: 70, calories_burned: 550, date: formatD(1) },
-            { id: '3', name: 'Evening Cycling', duration: 50, calories_burned: 480, date: formatD(2) },
-            { id: '4', name: 'Pull Day Gym Session', duration: 60, calories_burned: 400, date: formatD(3) },
-            { id: '5', name: 'HIIT Cardio', duration: 30, calories_burned: 380, date: formatD(4) }
-          ]))
-          
-          localStorage.setItem('fitlogic_bmi', JSON.stringify([
-            { id: '1', height: 175, weight: 78.5, bmi: 25.6, category: 'Overweight', recorded_at: new Date().toISOString() }
-          ]))
-
-          localStorage.setItem('fitlogic_calories', JSON.stringify([
-            { id: '1', age: 21, gender: 'male', height: 175, weight: 78.5, activity_level: 'moderate', goal: 'lose_slow', bmr: 1740, tdee: 2697, target_calories: 2447, recorded_at: new Date().toISOString() }
-          ]))
+          seedAllMockData('demo@fitlogic.com', 'Demo Student')
         }
       }
       const user = JSON.parse(userStr)
@@ -267,40 +291,7 @@ export const mockSupabase = {
       
       // Inject some mock seed data if not present
       if (!localStorage.getItem('fitlogic_profile')) {
-        localStorage.setItem('fitlogic_profile', JSON.stringify({
-          id: 'demo-user-id',
-          email,
-          full_name: 'Demo Student',
-          height: 175,
-          weight: 78.5,
-          target_weight: 72.0,
-          target_calories: 2200
-        }))
-        
-        // Seed workouts
-        const today = new Date()
-        const formatD = (offset: number) => {
-          const d = new Date(today)
-          d.setDate(d.getDate() - offset)
-          return d.toISOString().split('T')[0]
-        }
-        localStorage.setItem('fitlogic_workouts', JSON.stringify([
-          { id: '1', name: 'Swimming', duration: 40, calories_burned: 450, date: formatD(0) },
-          { id: '2', name: 'Leg Day Gym Session', duration: 70, calories_burned: 550, date: formatD(1) },
-          { id: '3', name: 'Evening Cycling', duration: 50, calories_burned: 480, date: formatD(2) },
-          { id: '4', name: 'Pull Day Gym Session', duration: 60, calories_burned: 400, date: formatD(3) },
-          { id: '5', name: 'HIIT Cardio', duration: 30, calories_burned: 380, date: formatD(4) }
-        ]))
-        
-        // Seed BMI
-        localStorage.setItem('fitlogic_bmi', JSON.stringify([
-          { id: '1', height: 175, weight: 78.5, bmi: 25.6, category: 'Overweight', recorded_at: new Date().toISOString() }
-        ]))
-
-        // Seed Calories
-        localStorage.setItem('fitlogic_calories', JSON.stringify([
-          { id: '1', age: 21, gender: 'male', height: 175, weight: 78.5, activity_level: 'moderate', goal: 'lose_slow', bmr: 1740, tdee: 2697, target_calories: 2447, recorded_at: new Date().toISOString() }
-        ]))
+        seedAllMockData(email, 'Demo Student')
       }
 
       return { data: { user }, error: null }
