@@ -57,8 +57,8 @@ export default async function DashboardPage() {
 
   if (recentWorkouts) {
     workoutCount = recentWorkouts.length
-    totalDuration = recentWorkouts.reduce((sum, w) => sum + (w.duration || 0), 0)
-    totalCalories = recentWorkouts.reduce((sum, w) => sum + (w.calories_burned || 0), 0)
+    totalDuration = recentWorkouts.reduce((sum: number, w: any) => sum + (w.duration || 0), 0)
+    totalCalories = recentWorkouts.reduce((sum: number, w: any) => sum + (w.calories_burned || 0), 0)
   }
 
   // Build last 7 days chart data
@@ -76,8 +76,8 @@ export default async function DashboardPage() {
     const dateLabel = d.toLocaleDateString('en-US', { weekday: 'short', month: 'numeric', day: 'numeric' })
     
     // Sum calories burned for workouts on this date
-    const dailyWorkouts = recentWorkouts?.filter(w => w.date === dateStr) || []
-    const dailyCalories = dailyWorkouts.reduce((sum, w) => sum + (w.calories_burned || 0), 0)
+    const dailyWorkouts = recentWorkouts?.filter((w: any) => w.date === dateStr) || []
+    const dailyCalories = dailyWorkouts.reduce((sum: number, w: any) => sum + (w.calories_burned || 0), 0)
 
     chartData.push({
       date: dateLabel,

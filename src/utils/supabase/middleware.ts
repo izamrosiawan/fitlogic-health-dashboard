@@ -6,6 +6,32 @@ export async function updateSession(request: NextRequest) {
     request,
   })
 
+  const isMock = process.env.NEXT_PUBLIC_SUPABASE_URL?.includes('your-supabase-project-id') || 
+                 !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+                 process.env.NEXT_PUBLIC_SUPABASE_URL === 'https://your-supabase-project-id.supabase.co'
+
+  if (isMock) {
+    const userCookie = request.cookies.get('fitlogic_user')
+    const pathname = request.nextUrl.pathname
+
+    if (pathname.startsWith('/dashboard')) {
+      if (!userCookie) {
+        const url = request.nextUrl.clone()
+        url.pathname = '/login'
+        url.searchParams.set('next', pathname)
+        return NextResponse.redirect(url)
+      }
+    }
+
+    if (userCookie && (pathname === '/login' || pathname === '/register' || pathname === '/forgot-password')) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/dashboard'
+      return NextResponse.redirect(url)
+    }
+
+    return supabaseResponse
+  }
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,

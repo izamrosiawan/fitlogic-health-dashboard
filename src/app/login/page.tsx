@@ -50,6 +50,56 @@ function LoginForm() {
     }
   }
 
+  const handleGuestLogin = () => {
+    if (typeof window === 'undefined') return
+    const user = {
+      id: 'demo-user-id',
+      email: 'guest@fitlogic.com',
+      user_metadata: { full_name: 'Guest Student' }
+    }
+    localStorage.setItem('fitlogic_user', JSON.stringify(user))
+    document.cookie = "fitlogic_user=true; path=/"
+    
+    // Inject mock seed data if not present
+    if (!localStorage.getItem('fitlogic_profile')) {
+      localStorage.setItem('fitlogic_profile', JSON.stringify({
+        id: 'demo-user-id',
+        email: 'guest@fitlogic.com',
+        full_name: 'Guest Student',
+        height: 175,
+        weight: 78.5,
+        target_weight: 72.0,
+        target_calories: 2200
+      }))
+      
+      const today = new Date()
+      const formatD = (offset: number) => {
+        const d = new Date(today)
+        d.setDate(d.getDate() - offset)
+        return d.toISOString().split('T')[0]
+      }
+      localStorage.setItem('fitlogic_workouts', JSON.stringify([
+        { id: '1', name: 'Swimming', duration: 40, calories_burned: 450, date: formatD(0) },
+        { id: '2', name: 'Leg Day Gym Session', duration: 70, calories_burned: 550, date: formatD(1) },
+        { id: '3', name: 'Evening Cycling', duration: 50, calories_burned: 480, date: formatD(2) },
+        { id: '4', name: 'Pull Day Gym Session', duration: 60, calories_burned: 400, date: formatD(3) },
+        { id: '5', name: 'HIIT Cardio', duration: 30, calories_burned: 380, date: formatD(4) }
+      ]))
+      
+      localStorage.setItem('fitlogic_bmi', JSON.stringify([
+        { id: '1', height: 175, weight: 78.5, bmi: 25.6, category: 'Overweight', recorded_at: new Date().toISOString() }
+      ]))
+
+      localStorage.setItem('fitlogic_calories', JSON.stringify([
+        { id: '1', age: 21, gender: 'male', height: 175, weight: 78.5, activity_level: 'moderate', goal: 'lose_slow', bmr: 1740, tdee: 2697, target_calories: 2447, recorded_at: new Date().toISOString() }
+      ]))
+    }
+
+    toast.success('Entering guest demo mode...')
+    router.push('/dashboard')
+    router.refresh()
+  }
+
   return (
     <div className="min-h-screen relative flex items-center justify-center p-4 bg-neutral-950 overflow-hidden">
       {/* Decorative background glows */}
@@ -137,6 +187,15 @@ function LoginForm() {
                     Continue <ArrowRight className="h-5 w-5" />
                   </>
                 )}
+              </Button>
+
+              <Button
+                type="button"
+                onClick={handleGuestLogin}
+                variant="outline"
+                className="w-full border-neutral-800 bg-neutral-900/40 hover:bg-neutral-900 text-neutral-200 font-bold h-11 rounded-xl cursor-pointer"
+              >
+                Access as Guest (Demo Mode)
               </Button>
 
               <p className="text-neutral-400 text-sm text-center font-medium">
