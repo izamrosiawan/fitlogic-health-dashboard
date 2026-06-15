@@ -3,122 +3,194 @@
 
 class MockQueryBuilder {
   table: string
+  action: 'select' | 'insert' | 'delete' | 'upsert' = 'select'
+  filters: { field: string; value: any; type: 'eq' | 'gte' }[] = []
+  orderBy: { field: string; ascending: boolean }[] = []
+  limitVal: number | null = null
+  isSingle: boolean = false
+  payload: any = null
+
   constructor(table: string) {
     this.table = table
   }
 
-  select(fields?: string) { return this }
-  eq(field: string, val: any) { return this }
-  gte(field: string, val: any) { return this }
-  order(field: string, options?: any) { return this }
-  limit(n: number) { return this }
-
-  // Promise resolution support for direct await of queries
-  then(onfulfilled: (value: any) => any) {
-    if (typeof window === 'undefined') {
-      return Promise.resolve(onfulfilled({ data: [], error: null }))
+  select(fields?: string) {
+    // Keep action as is if it's already insert/delete/upsert (for chaining after insert)
+    if (this.action === 'select') {
+      this.action = 'select'
     }
-
-    let data: any = []
-    if (this.table === 'profiles') {
-      const p = localStorage.getItem('fitlogic_profile')
-      data = p ? JSON.parse(p) : null
-    } else if (this.table === 'bmi_records') {
-      const r = localStorage.getItem('fitlogic_bmi')
-      data = r ? JSON.parse(r) : []
-    } else if (this.table === 'calorie_records') {
-      const r = localStorage.getItem('fitlogic_calories')
-      data = r ? JSON.parse(r) : []
-    } else if (this.table === 'workouts') {
-      const r = localStorage.getItem('fitlogic_workouts')
-      data = r ? JSON.parse(r) : []
-    }
-
-    return Promise.resolve(onfulfilled({ data, error: null }))
+    return this
   }
 
-  async single() {
-    if (typeof window === 'undefined') {
-      return { data: null, error: null }
-    }
-    if (this.table === 'profiles') {
-      const p = localStorage.getItem('fitlogic_profile')
-      return { data: p ? JSON.parse(p) : null, error: null }
-    }
-    return { data: null, error: null }
+  insert(values: any) {
+    this.action = 'insert'
+    this.payload = values
+    return this
   }
 
-  async insert(values: any) {
+  delete() {
+    this.action = 'delete'
+    return this
+  }
+
+  upsert(values: any) {
+    this.action = 'upsert'
+    this.payload = values
+    return this
+  }
+
+  eq(field: string, val: any) {
+    this.filters.push({ field, value: val, type: 'eq' })
+    return this
+  }
+
+  gte(field: string, val: any) {
+    this.filters.push({ field, value: val, type: 'gte' })
+    return this
+  }
+
+  order(field: string, options?: any) {
+    this.orderBy.push({ field, ascending: options?.ascending !== false })
+    return this
+  }
+
+  limit(n: number) {
+    this.limitVal = n
+    return this
+  }
+
+  single() {
+    this.isSingle = true
+    return this
+  }
+
+  // Thenable implementation to support direct await on the query chain
+  then(onfulfilled?: (value: any) => any, onrejected?: (reason: any) => any) {
     if (typeof window === 'undefined') {
-      return { data: values, error: null }
+      const emptyResult = { data: this.isSingle ? null : [], error: null }
+      return Promise.resolve(onfulfilled ? onfulfilled(emptyResult) : emptyResult)
     }
 
     let list: any[] = []
-    let dataToInsert = Array.isArray(values) ? values : [values]
-
-    if (this.table === 'bmi_records') {
+    
+    // Load data from localStorage
+    if (this.table === 'profiles') {
+      const p = localStorage.getItem('fitlogic_profile')
+      const profile = p ? JSON.parse(p) : null
+      list = profile ? [profile] : []
+    } else if (this.table === 'bmi_records') {
       list = JSON.parse(localStorage.getItem('fitlogic_bmi') || '[]')
-      dataToInsert = dataToInsert.map(x => ({
-        id: Math.random().toString(36).substring(7),
-        recorded_at: new Date().toISOString(),
-        ...x
-      }))
-      list = [...dataToInsert, ...list]
-      localStorage.setItem('fitlogic_bmi', JSON.stringify(list))
     } else if (this.table === 'calorie_records') {
       list = JSON.parse(localStorage.getItem('fitlogic_calories') || '[]')
-      dataToInsert = dataToInsert.map(x => ({
+    } else if (this.table === 'workouts') {
+      list = JSON.parse(localStorage.getItem('fitlogic_workouts') || '[]')
+    }
+
+    let resultData: any = null
+    let error: any = null
+
+    if (this.action === 'insert') {
+      let dataToInsert = Array.isArray(this.payload) ? this.payload : [this.payload]
+      dataToInsert = dataToInsert.map((x: any) => ({
         id: Math.random().toString(36).substring(7),
+        created_at: new Date().toISOString(),
         recorded_at: new Date().toISOString(),
         ...x
       }))
       list = [...dataToInsert, ...list]
-      localStorage.setItem('fitlogic_calories', JSON.stringify(list))
-    } else if (this.table === 'workouts') {
-      list = JSON.parse(localStorage.getItem('fitlogic_workouts') || '[]')
-      dataToInsert = dataToInsert.map(x => ({
-        id: Math.random().toString(36).substring(7),
-        created_at: new Date().toISOString(),
-        ...x
-      }))
-      list = [...dataToInsert, ...list]
-      localStorage.setItem('fitlogic_workouts', JSON.stringify(list))
-    }
 
-    return {
-      data: dataToInsert,
-      error: null,
-      select: () => ({
-        then: (cb: any) => cb({ data: dataToInsert, error: null })
-      })
-    }
-  }
+      if (this.table === 'bmi_records') {
+        localStorage.setItem('fitlogic_bmi', JSON.stringify(list))
+      } else if (this.table === 'calorie_records') {
+        localStorage.setItem('fitlogic_calories', JSON.stringify(list))
+      } else if (this.table === 'workouts') {
+        localStorage.setItem('fitlogic_workouts', JSON.stringify(list))
+      }
 
-  async upsert(values: any) {
-    if (typeof window !== 'undefined' && this.table === 'profiles') {
-      localStorage.setItem('fitlogic_profile', JSON.stringify(values))
-    }
-    return { data: values, error: null }
-  }
-
-  async delete() {
-    return {
-      eq: (field: string, val: any) => {
-        if (typeof window !== 'undefined') {
-          if (this.table === 'bmi_records') {
-            const list = JSON.parse(localStorage.getItem('fitlogic_bmi') || '[]')
-            localStorage.setItem('fitlogic_bmi', JSON.stringify(list.filter((x: any) => x[field] !== val)))
-          } else if (this.table === 'calorie_records') {
-            const list = JSON.parse(localStorage.getItem('fitlogic_calories') || '[]')
-            localStorage.setItem('fitlogic_calories', JSON.stringify(list.filter((x: any) => x[field] !== val)))
-          } else if (this.table === 'workouts') {
-            const list = JSON.parse(localStorage.getItem('fitlogic_workouts') || '[]')
-            localStorage.setItem('fitlogic_workouts', JSON.stringify(list.filter((x: any) => x[field] !== val)))
+      resultData = dataToInsert
+    } else if (this.action === 'upsert') {
+      if (this.table === 'profiles') {
+        localStorage.setItem('fitlogic_profile', JSON.stringify(this.payload))
+        resultData = this.payload
+      }
+    } else if (this.action === 'delete') {
+      const itemsToDelete = list.filter((item: any) => {
+        return this.filters.length > 0 && this.filters.every(filter => {
+          if (filter.type === 'eq') {
+            return item[filter.field] === filter.value
           }
+          return false
+        })
+      })
+
+      const filteredList = list.filter((item: any) => {
+        const matchesAllFilters = this.filters.length > 0 && this.filters.every(filter => {
+          if (filter.type === 'eq') {
+            return item[filter.field] === filter.value
+          }
+          return false
+        })
+        return !matchesAllFilters
+      })
+
+      if (this.table === 'bmi_records') {
+        localStorage.setItem('fitlogic_bmi', JSON.stringify(filteredList))
+      } else if (this.table === 'calorie_records') {
+        localStorage.setItem('fitlogic_calories', JSON.stringify(filteredList))
+      } else if (this.table === 'workouts') {
+        localStorage.setItem('fitlogic_workouts', JSON.stringify(filteredList))
+      }
+
+      resultData = itemsToDelete
+    } else {
+      // select action
+      let filtered = [...list]
+      
+      // Apply filters
+      for (const filter of this.filters) {
+        filtered = filtered.filter((item: any) => {
+          if (filter.type === 'eq') {
+            return item[filter.field] === filter.value
+          } else if (filter.type === 'gte') {
+            return item[filter.field] >= filter.value
+          }
+          return true
+        })
+      }
+
+      // Apply sorting (compound comparator)
+      if (this.orderBy.length > 0) {
+        filtered.sort((a, b) => {
+          for (const order of this.orderBy) {
+            const valA = a[order.field]
+            const valB = b[order.field]
+            if (valA === undefined || valB === undefined) continue
+            if (valA < valB) return order.ascending ? -1 : 1
+            if (valA > valB) return order.ascending ? 1 : -1
+          }
+          return 0
+        })
+      }
+
+      // Apply limit
+      if (this.limitVal !== null) {
+        filtered = filtered.slice(0, this.limitVal)
+      }
+
+      if (this.isSingle) {
+        if (filtered.length > 0) {
+          resultData = filtered[0]
+        } else {
+          resultData = null
+          error = { code: 'PGRST116', message: 'The query returned 0 rows' }
         }
-        return Promise.resolve({ error: null })
+      } else {
+        resultData = filtered
       }
     }
+
+    const val = { data: resultData, error }
+    return Promise.resolve(onfulfilled ? onfulfilled(val) : val)
   }
 }
 

@@ -3,9 +3,9 @@ import { cookies } from 'next/headers'
 import { mockSupabase } from './mockClient'
 
 export async function createClient() {
-  const isMock = process.env.NEXT_PUBLIC_SUPABASE_URL?.includes('your-supabase-project-id') || 
-                 !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-                 process.env.NEXT_PUBLIC_SUPABASE_URL === 'https://your-supabase-project-id.supabase.co'
+  // Set to true to run in local mock database mode for presentations/demos.
+  // Set to false when connecting to a real Supabase backend.
+  const isMock = true
 
   if (isMock) {
     const cookieStore = await cookies()

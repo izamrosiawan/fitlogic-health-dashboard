@@ -2,9 +2,9 @@ import { createBrowserClient } from '@supabase/ssr'
 import { mockSupabase } from './mockClient'
 
 export function createClient() {
-  const isMock = process.env.NEXT_PUBLIC_SUPABASE_URL?.includes('your-supabase-project-id') || 
-                 !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-                 process.env.NEXT_PUBLIC_SUPABASE_URL === 'https://your-supabase-project-id.supabase.co'
+  // Set to true to run in local mock database mode for presentations/demos.
+  // Set to false when connecting to a real Supabase backend.
+  const isMock = true
 
   if (isMock) {
     return mockSupabase as any
