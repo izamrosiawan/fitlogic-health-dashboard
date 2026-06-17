@@ -270,12 +270,17 @@ export const mockSupabase = {
         localStorage.setItem('fitlogic_user', JSON.stringify(defaultUser))
         userStr = JSON.stringify(defaultUser)
         document.cookie = "fitlogic_user=true; path=/"
-        
-        // Seed database objects if missing
-        if (!localStorage.getItem('fitlogic_profile')) {
-          seedAllMockData('demo@fitlogic.com', 'Demo Student')
-        }
       }
+      
+      // Self-healing: Seed data if tables are empty/missing
+      const hasWorkouts = localStorage.getItem('fitlogic_workouts')
+      const hasBmi = localStorage.getItem('fitlogic_bmi')
+      const hasProfile = localStorage.getItem('fitlogic_profile')
+      
+      if (!hasProfile || !hasWorkouts || JSON.parse(hasWorkouts || '[]').length === 0 || !hasBmi || JSON.parse(hasBmi || '[]').length === 0) {
+        seedAllMockData('demo@fitlogic.com', 'Demo Student')
+      }
+
       const user = JSON.parse(userStr)
       return { data: { user }, error: null }
     },
