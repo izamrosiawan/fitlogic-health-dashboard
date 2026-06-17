@@ -29,7 +29,7 @@ export default async function DashboardLayout({
   const email = profile?.email || user.email
 
   return (
-    <div className="flex min-h-screen bg-neutral-950 text-neutral-100 pb-16 md:pb-0">
+    <div className="flex min-h-screen bg-background text-foreground pb-16 md:pb-0">
       <Sidebar />
       <div className="flex-1 flex flex-col min-w-0">
         <Header userEmail={email} userName={displayName} />

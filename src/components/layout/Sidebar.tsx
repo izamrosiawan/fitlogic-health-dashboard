@@ -10,7 +10,7 @@ import {
   Dumbbell,
   TrendingUp,
   User,
-  RotateCcw,
+  LogOut,
   Activity
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -29,23 +29,17 @@ export function Sidebar() {
   const router = useRouter()
   const supabase = createClient()
 
-  const handleResetDemo = () => {
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('fitlogic_user')
-      localStorage.removeItem('fitlogic_profile')
-      localStorage.removeItem('fitlogic_workouts')
-      localStorage.removeItem('fitlogic_bmi')
-      localStorage.removeItem('fitlogic_calories')
-      document.cookie = "fitlogic_user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;"
-      window.location.href = '/'
-    }
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
+    router.push('/login')
+    router.refresh()
   }
 
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="hidden md:flex flex-col w-64 bg-neutral-950 border-r border-neutral-900 h-screen sticky top-0 text-neutral-200">
-        <div className="h-16 flex items-center px-6 border-b border-neutral-900 gap-2">
+      <aside className="hidden md:flex flex-col w-64 bg-sidebar border-r border-sidebar-border h-screen sticky top-0 text-neutral-200">
+        <div className="h-16 flex items-center px-6 border-b border-sidebar-border gap-2">
           <Activity className="h-6 w-6 text-orange-500 animate-pulse" />
           <span className="font-bold text-xl tracking-wider text-white">
             FIT<span className="text-orange-500">LOGIC</span>
@@ -78,17 +72,17 @@ export function Sidebar() {
 
         <div className="p-4 border-t border-neutral-900">
           <button
-            onClick={handleResetDemo}
-            className="w-full flex items-center px-4 py-3 text-sm font-semibold rounded-xl text-amber-500 hover:bg-amber-500/5 hover:text-amber-400 transition-all duration-200 gap-3 cursor-pointer"
+            onClick={handleLogout}
+            className="w-full flex items-center px-4 py-3 text-sm font-semibold rounded-xl text-red-400 hover:bg-red-500/5 hover:text-red-300 transition-all duration-200 gap-3 cursor-pointer"
           >
-            <RotateCcw className="h-5 w-5" />
-            Reset Demo
+            <LogOut className="h-5 w-5" />
+            Log Out
           </button>
         </div>
       </aside>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-neutral-950/90 border-t border-neutral-900 backdrop-blur-lg flex justify-around items-center h-16 px-2 z-50">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-sidebar/90 border-t border-sidebar-border backdrop-blur-lg flex justify-around items-center h-16 px-2 z-50">
         {navItems.map((item) => {
           const isActive = pathname === item.href
           return (

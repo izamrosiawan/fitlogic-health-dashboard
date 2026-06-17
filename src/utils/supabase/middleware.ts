@@ -12,22 +12,12 @@ export async function updateSession(request: NextRequest) {
     const userCookie = request.cookies.get('fitlogic_user')
     const pathname = request.nextUrl.pathname
 
-    // Auto-redirect root to dashboard in demo mode
-    if (pathname === '/') {
-      const url = request.nextUrl.clone()
-      url.pathname = '/dashboard'
-      const response = NextResponse.redirect(url)
-      if (!userCookie) {
-        response.cookies.set('fitlogic_user', 'true', { path: '/' })
-      }
-      return response
-    }
-
     if (pathname.startsWith('/dashboard')) {
       if (!userCookie) {
-        const response = NextResponse.next({ request })
-        response.cookies.set('fitlogic_user', 'true', { path: '/' })
-        return response
+        const url = request.nextUrl.clone()
+        url.pathname = '/login'
+        url.searchParams.set('next', pathname)
+        return NextResponse.redirect(url)
       }
     }
 
