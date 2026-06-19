@@ -164,15 +164,15 @@ export default function BmiPage() {
   const getCategoryColor = (category: string) => {
     switch (category?.toLowerCase()) {
       case 'underweight':
-        return 'text-sky-400 font-bold bg-sky-500/10 border-sky-500/20 px-2.5 py-0.5 rounded-full border text-xs'
+        return 'text-sky-600 dark:text-sky-400 font-bold bg-sky-500/10 border-sky-500/20 px-2.5 py-0.5 rounded-full border text-xs'
       case 'normal weight':
-        return 'text-emerald-400 font-bold bg-emerald-500/10 border-emerald-500/20 px-2.5 py-0.5 rounded-full border text-xs'
+        return 'text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-500/10 border-emerald-500/20 px-2.5 py-0.5 rounded-full border text-xs'
       case 'overweight':
-        return 'text-amber-400 font-bold bg-amber-500/10 border-amber-500/20 px-2.5 py-0.5 rounded-full border text-xs'
+        return 'text-amber-600 dark:text-amber-400 font-bold bg-amber-500/10 border-amber-500/20 px-2.5 py-0.5 rounded-full border text-xs'
       case 'obese':
-        return 'text-red-400 font-bold bg-red-500/10 border-red-500/20 px-2.5 py-0.5 rounded-full border text-xs'
+        return 'text-red-600 dark:text-red-400 font-bold bg-red-500/10 border-red-500/20 px-2.5 py-0.5 rounded-full border text-xs'
       default:
-        return 'text-neutral-400 font-bold bg-neutral-500/10 border-neutral-500/20 px-2.5 py-0.5 rounded-full border text-xs'
+        return 'text-muted-foreground font-bold bg-muted border-border px-2.5 py-0.5 rounded-full border text-xs'
     }
   }
 
@@ -185,12 +185,12 @@ export default function BmiPage() {
         
         {/* BMI Input Form and Result */}
         <div className="lg:col-span-1 space-y-6">
-          <Card className="bg-neutral-950 border-neutral-900 glass-panel">
+          <Card className="bg-card border-border text-card-foreground">
             <CardHeader>
-              <CardTitle className="text-white flex items-center gap-2">
-                <Scale className="h-5 w-5 text-emerald-400" /> Calculate BMI
+              <CardTitle className="text-foreground flex items-center gap-2 text-lg font-semibold tracking-tight">
+                <Scale className="h-5 w-5 text-primary" /> Calculate BMI
               </CardTitle>
-              <CardDescription className="text-neutral-400">
+              <CardDescription className="text-muted-foreground">
                 Enter details below to find your BMI score
               </CardDescription>
             </CardHeader>
@@ -198,7 +198,7 @@ export default function BmiPage() {
               <CardContent className="space-y-4">
                 {/* Unit selector */}
                 <div className="space-y-1.5">
-                  <Label htmlFor="unit" className="text-neutral-300 font-medium">Measurement Unit</Label>
+                  <Label htmlFor="unit" className="text-foreground font-medium">Measurement Unit</Label>
                   <Select 
                     value={unit} 
                     onValueChange={(val) => {
@@ -211,10 +211,10 @@ export default function BmiPage() {
                       }
                     }}
                   >
-                    <SelectTrigger className="w-full bg-neutral-900 border-neutral-800 text-white rounded-xl h-10">
+                    <SelectTrigger className="w-full bg-background border-border text-foreground rounded-xl h-10">
                       <SelectValue placeholder="Select unit" />
                     </SelectTrigger>
-                    <SelectContent className="bg-neutral-900 border-neutral-800 text-white rounded-xl">
+                    <SelectContent className="bg-popover border-border text-popover-foreground rounded-xl">
                       <SelectItem value="metric">Metric (cm, kg)</SelectItem>
                       <SelectItem value="imperial">Imperial (in, lbs)</SelectItem>
                     </SelectContent>
@@ -223,7 +223,7 @@ export default function BmiPage() {
 
                 {/* Height Input */}
                 <div className="space-y-1.5">
-                  <Label htmlFor="height" className="text-neutral-300 font-medium">
+                  <Label htmlFor="height" className="text-foreground font-medium">
                     Height ({unit === 'metric' ? 'cm' : 'inches'})
                   </Label>
                   <Input
@@ -233,14 +233,14 @@ export default function BmiPage() {
                     placeholder={unit === 'metric' ? 'e.g. 175' : 'e.g. 69'}
                     value={height}
                     onChange={(e) => setHeight(e.target.value)}
-                    className="bg-neutral-900/50 border-neutral-800 focus:border-orange-500 text-white h-10 rounded-xl"
+                    className="bg-background border-border focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground h-10 rounded-xl"
                     required
                   />
                 </div>
 
                 {/* Weight Input */}
                 <div className="space-y-1.5">
-                  <Label htmlFor="weight" className="text-neutral-300 font-medium">
+                  <Label htmlFor="weight" className="text-foreground font-medium">
                     Weight ({unit === 'metric' ? 'kg' : 'lbs'})
                   </Label>
                   <Input
@@ -250,7 +250,7 @@ export default function BmiPage() {
                     placeholder={unit === 'metric' ? 'e.g. 70' : 'e.g. 154'}
                     value={weight}
                     onChange={(e) => setWeight(e.target.value)}
-                    className="bg-neutral-900/50 border-neutral-800 focus:border-orange-500 text-white h-10 rounded-xl"
+                    className="bg-background border-border focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground h-10 rounded-xl"
                     required
                   />
                 </div>
@@ -258,7 +258,7 @@ export default function BmiPage() {
               <CardFooter className="flex flex-col gap-3">
                 <Button
                   type="submit"
-                  className="w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold h-10 rounded-xl cursor-pointer"
+                  className="w-full bg-primary hover:bg-primary-focus text-white font-semibold h-10 rounded-xl cursor-pointer transition-colors shadow-xs"
                 >
                   Calculate BMI
                 </Button>
@@ -275,13 +275,13 @@ export default function BmiPage() {
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.3 }}
               >
-                <Card className="bg-neutral-950 border-neutral-900 bg-gradient-to-r from-emerald-500/5 to-neutral-950">
+                <Card className="bg-card border border-border text-card-foreground">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-bold text-neutral-400 uppercase tracking-wider">Your Result</CardTitle>
+                    <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Your Result</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="flex items-baseline justify-between">
-                      <div className="text-5xl font-extrabold text-white">
+                      <div className="text-5xl font-semibold tracking-tight text-foreground">
                         {calculatedBmi.toFixed(1)}
                       </div>
                       <div className={getCategoryColor(bmiCategory)}>
@@ -289,8 +289,8 @@ export default function BmiPage() {
                       </div>
                     </div>
 
-                    <div className="p-3 bg-neutral-900/40 rounded-xl border border-neutral-900 text-xs text-neutral-400 leading-relaxed font-medium flex gap-2">
-                      <Info className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
+                    <div className="p-3 bg-muted/40 rounded-xl border border-border text-xs text-muted-foreground leading-relaxed font-medium flex gap-2">
+                      <Info className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                       <span>
                         A healthy BMI for adults is between 18.5 and 24.9. BMI is a useful indicator, but does not measure body fat percentage directly.
                       </span>
@@ -300,7 +300,7 @@ export default function BmiPage() {
                     <Button
                       onClick={handleSave}
                       disabled={submitting}
-                      className="w-full bg-emerald-500 hover:bg-emerald-600 text-neutral-950 font-bold h-10 rounded-xl cursor-pointer flex items-center justify-center gap-2"
+                      className="w-full bg-primary hover:bg-primary-focus text-white font-semibold h-10 rounded-xl cursor-pointer flex items-center justify-center gap-2 transition-colors shadow-xs"
                     >
                       {submitting ? (
                         <Loader2 className="h-5 w-5 animate-spin" />
@@ -319,11 +319,11 @@ export default function BmiPage() {
 
         {/* BMI History List */}
         <div className="lg:col-span-2">
-          <Card className="bg-neutral-950 border-neutral-900 h-full">
+          <Card className="bg-card border-border h-full text-card-foreground shadow-xs">
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
-                <CardTitle className="text-white">BMI History</CardTitle>
-                <CardDescription className="text-neutral-400">
+                <CardTitle className="text-foreground text-lg font-semibold tracking-tight">BMI History</CardTitle>
+                <CardDescription className="text-muted-foreground">
                   Track your changes and updates over time
                 </CardDescription>
               </div>
@@ -331,7 +331,7 @@ export default function BmiPage() {
                 variant="outline"
                 size="icon"
                 onClick={fetchRecords}
-                className="border-neutral-800 hover:bg-neutral-900 text-neutral-400 cursor-pointer h-8 w-8"
+                className="border-border hover:bg-muted text-muted-foreground cursor-pointer h-8 w-8"
                 disabled={loadingRecords}
               >
                 <RefreshCw className={`h-4 w-4 ${loadingRecords ? 'animate-spin' : ''}`} />
@@ -339,26 +339,26 @@ export default function BmiPage() {
             </CardHeader>
             <CardContent>
               {loadingRecords ? (
-                <div className="flex flex-col items-center justify-center py-20 text-neutral-500 space-y-2">
-                  <Loader2 className="h-8 w-8 animate-spin text-orange-500" />
+                <div className="flex flex-col items-center justify-center py-20 text-muted-foreground space-y-2">
+                  <Loader2 className="h-8 w-8 animate-spin text-primary" />
                   <span className="text-sm font-semibold">Loading history...</span>
                 </div>
               ) : records.length > 0 ? (
                 <div className="overflow-x-auto">
                   <Table>
-                    <TableHeader className="border-neutral-900">
-                      <TableRow className="border-neutral-900 hover:bg-transparent">
-                        <TableHead className="text-neutral-400 font-bold">Date</TableHead>
-                        <TableHead className="text-neutral-400 font-bold">Height</TableHead>
-                        <TableHead className="text-neutral-400 font-bold">Weight</TableHead>
-                        <TableHead className="text-neutral-400 font-bold">BMI</TableHead>
-                        <TableHead className="text-neutral-400 font-bold">Category</TableHead>
-                        <TableHead className="text-neutral-400 font-bold text-right">Action</TableHead>
+                    <TableHeader className="border-border">
+                      <TableRow className="border-border hover:bg-transparent">
+                        <TableHead className="text-muted-foreground font-semibold">Date</TableHead>
+                        <TableHead className="text-muted-foreground font-semibold">Height</TableHead>
+                        <TableHead className="text-muted-foreground font-semibold">Weight</TableHead>
+                        <TableHead className="text-muted-foreground font-semibold">BMI</TableHead>
+                        <TableHead className="text-muted-foreground font-semibold">Category</TableHead>
+                        <TableHead className="text-muted-foreground font-semibold text-right">Action</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {records.map((rec) => (
-                        <TableRow key={rec.id} className="border-neutral-900 hover:bg-neutral-900/30 text-neutral-200">
+                        <TableRow key={rec.id} className="border-border hover:bg-muted/40 text-foreground">
                           <TableCell className="font-semibold text-sm">
                             {new Date(rec.recorded_at).toLocaleDateString('en-US', {
                               month: 'short',
@@ -368,7 +368,7 @@ export default function BmiPage() {
                           </TableCell>
                           <TableCell className="font-medium">{rec.height} cm</TableCell>
                           <TableCell className="font-medium">{rec.weight} kg</TableCell>
-                          <TableCell className="font-extrabold text-white">{rec.bmi.toFixed(1)}</TableCell>
+                          <TableCell className="font-semibold text-foreground">{rec.bmi.toFixed(1)}</TableCell>
                           <TableCell>
                             <span className={getCategoryColor(rec.category)}>
                               {rec.category}
@@ -379,7 +379,7 @@ export default function BmiPage() {
                               variant="ghost"
                               size="icon"
                               onClick={() => handleDelete(rec.id)}
-                              className="text-red-400 hover:bg-red-500/10 hover:text-red-300 cursor-pointer h-7 w-7"
+                              className="text-destructive hover:bg-destructive/10 hover:text-destructive cursor-pointer h-7 w-7"
                               disabled={deletingId === rec.id}
                             >
                               {deletingId === rec.id ? (
@@ -396,9 +396,9 @@ export default function BmiPage() {
                 </div>
               ) : (
                 <div className="flex flex-col items-center justify-center text-center py-20 space-y-3">
-                  <Scale className="h-12 w-12 text-neutral-600 animate-pulse" />
-                  <p className="text-base font-bold text-neutral-400">No BMI entries yet</p>
-                  <p className="text-xs text-neutral-500 max-w-sm">Use the form on the left to calculate and save your first Body Mass Index profile.</p>
+                  <Scale className="h-12 w-12 text-muted-foreground" />
+                  <p className="text-base font-semibold text-muted-foreground">No BMI entries yet</p>
+                  <p className="text-xs text-muted-foreground max-w-sm">Use the form on the left to calculate and save your first Body Mass Index profile.</p>
                 </div>
               )}
             </CardContent>

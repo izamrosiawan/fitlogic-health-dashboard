@@ -37,22 +37,22 @@ export function WelcomeSection({ userName }: WelcomeSectionProps) {
   }
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-neutral-900 bg-gradient-to-r from-orange-500/10 to-amber-500/10 p-6 md:p-8">
+    <div className="relative overflow-hidden rounded-2xl border border-border bg-card p-6 md:p-8">
       {/* Background design elements */}
-      <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
       <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-2">
-          <h2 className="text-2xl md:text-3xl font-extrabold text-white">
-            {getGreeting()}, <span className="text-orange-500">{userName || 'Enthusiast'}</span>!
+          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-foreground">
+            {getGreeting()}, <span className="text-primary">{userName || 'Enthusiast'}</span>!
           </h2>
-          <p className="text-sm md:text-base text-neutral-400 font-medium flex items-center gap-1.5">
-            <Sparkles className="h-4 w-4 text-amber-400 shrink-0" />
+          <p className="text-sm md:text-base text-muted-foreground font-medium flex items-center gap-1.5">
+            <Sparkles className="h-4 w-4 text-primary shrink-0" />
             {getQuote()}
           </p>
         </div>
 
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-neutral-950/60 border border-neutral-900 text-neutral-400 text-xs font-semibold self-start md:self-center">
-          <Calendar className="h-4 w-4 text-orange-500" />
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-background border border-border text-muted-foreground text-xs font-semibold self-start md:self-center">
+          <Calendar className="h-4 w-4 text-primary" />
           {formatDate()}
         </div>
       </div>

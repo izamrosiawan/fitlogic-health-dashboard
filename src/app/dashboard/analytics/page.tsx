@@ -145,8 +145,8 @@ export default function AnalyticsPage() {
       description="Deep-dive into weight shift histories, calorie targets, and active workout profiles."
     >
       {loading ? (
-        <div className="flex flex-col items-center justify-center py-40 text-neutral-500 space-y-2">
-          <Loader2 className="h-8 w-8 animate-spin text-orange-500" />
+        <div className="flex flex-col items-center justify-center py-40 text-muted-foreground space-y-2">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
           <span className="text-sm font-semibold">Loading data analytics...</span>
         </div>
       ) : (
@@ -154,70 +154,70 @@ export default function AnalyticsPage() {
           
           {/* Key Indicators Row */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="bg-neutral-950 border-neutral-900 flex items-center justify-between p-6">
+            <Card className="bg-card border-border flex items-center justify-between p-6 shadow-xs text-card-foreground">
               <div className="space-y-1">
-                <p className="text-xs text-neutral-400 font-bold uppercase">Weight Variance</p>
-                <h3 className={`text-2xl font-extrabold ${parseFloat(weightChange) < 0 ? 'text-emerald-400' : parseFloat(weightChange) > 0 ? 'text-amber-500' : 'text-white'}`}>
+                <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">Weight Variance</p>
+                <h3 className={`text-2xl font-semibold tracking-tight ${parseFloat(weightChange) < 0 ? 'text-emerald-600 dark:text-emerald-400' : parseFloat(weightChange) > 0 ? 'text-amber-600 dark:text-amber-500' : 'text-foreground'}`}>
                   {weightChange}
                 </h3>
               </div>
-              <div className="h-10 w-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+              <div className="h-10 w-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
                 <Scale className="h-5 w-5" />
               </div>
             </Card>
 
-            <Card className="bg-neutral-950 border-neutral-900 flex items-center justify-between p-6">
+            <Card className="bg-card border-border flex items-center justify-between p-6 shadow-xs text-card-foreground">
               <div className="space-y-1">
-                <p className="text-xs text-neutral-400 font-bold uppercase">Peak Active Burn</p>
-                <h3 className="text-2xl font-extrabold text-white">
-                  {peakSessionBurn} <span className="text-xs text-neutral-500 font-semibold">kcal / session</span>
+                <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">Peak Active Burn</p>
+                <h3 className="text-2xl font-semibold tracking-tight text-foreground">
+                  {peakSessionBurn} <span className="text-xs text-muted-foreground font-semibold">kcal / session</span>
                 </h3>
               </div>
-              <div className="h-10 w-10 rounded-xl bg-orange-500/10 text-orange-500 flex items-center justify-center">
+              <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
                 <Flame className="h-5 w-5" />
               </div>
             </Card>
 
-            <Card className="bg-neutral-950 border-neutral-900 flex items-center justify-between p-6">
+            <Card className="bg-card border-border flex items-center justify-between p-6 shadow-xs text-card-foreground">
               <div className="space-y-1">
-                <p className="text-xs text-neutral-400 font-bold uppercase">Avg Session Duration</p>
-                <h3 className="text-2xl font-extrabold text-white">
-                  {avgWorkoutDuration} <span className="text-xs text-neutral-500 font-semibold">min</span>
+                <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">Avg Session Duration</p>
+                <h3 className="text-2xl font-semibold tracking-tight text-foreground">
+                  {avgWorkoutDuration} <span className="text-xs text-muted-foreground font-semibold">min</span>
                 </h3>
               </div>
-              <div className="h-10 w-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center">
+              <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
                 <Dumbbell className="h-5 w-5" />
               </div>
             </Card>
           </div>
 
           {/* Interactive Chart Section with Tabs */}
-          <Card className="bg-neutral-950 border-neutral-900 p-6 glass-panel-glow">
+          <Card className="bg-card border-border p-6 shadow-xs text-card-foreground">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-neutral-900 pb-4">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border pb-4">
                 <div>
-                  <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                    <Activity className="h-5 w-5 text-orange-500 animate-pulse" /> Fitness Progress Trends
+                  <h3 className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2">
+                    <Activity className="h-5 w-5 text-primary" /> Fitness Progress Trends
                   </h3>
-                  <p className="text-xs text-neutral-400 font-medium">Select parameters to view your historical logs</p>
+                  <p className="text-xs text-muted-foreground font-medium">Select parameters to view your historical logs</p>
                 </div>
                 
-                <TabsList className="bg-neutral-900 border border-neutral-800 rounded-xl p-1 text-neutral-400 self-start md:self-center">
+                <TabsList className="bg-muted border border-border rounded-xl p-1 text-muted-foreground self-start md:self-center">
                   <TabsTrigger 
                     value="weight" 
-                    className="px-4 py-1.5 rounded-lg text-xs font-bold data-[state=active]:bg-orange-500 data-[state=active]:text-white transition-all cursor-pointer"
+                    className="px-4 py-1.5 rounded-lg text-xs font-semibold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all cursor-pointer"
                   >
                     Weight Progress
                   </TabsTrigger>
                   <TabsTrigger 
                     value="energy" 
-                    className="px-4 py-1.5 rounded-lg text-xs font-bold data-[state=active]:bg-orange-500 data-[state=active]:text-white transition-all cursor-pointer"
+                    className="px-4 py-1.5 rounded-lg text-xs font-semibold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all cursor-pointer"
                   >
                     Active Expenditure
                   </TabsTrigger>
                   <TabsTrigger 
                     value="calorie" 
-                    className="px-4 py-1.5 rounded-lg text-xs font-bold data-[state=active]:bg-orange-500 data-[state=active]:text-white transition-all cursor-pointer"
+                    className="px-4 py-1.5 rounded-lg text-xs font-semibold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all cursor-pointer"
                   >
                     Caloric Target
                   </TabsTrigger>
@@ -232,20 +232,20 @@ export default function AnalyticsPage() {
                       <AreaChart data={weightData}>
                         <defs>
                           <linearGradient id="weightGlow" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#10b981" stopOpacity={0.4}/>
+                            <stop offset="5%" stopColor="#10b981" stopOpacity={0.25}/>
                             <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
                           </linearGradient>
                         </defs>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#171717" vertical={false} />
+                        <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
                         <XAxis 
                           dataKey="recorded_at" 
-                          stroke="#737373" 
+                          stroke="var(--muted-foreground)" 
                           fontSize={11} 
                           tickLine={false} 
                           axisLine={false} 
                         />
                         <YAxis 
-                          stroke="#737373" 
+                          stroke="var(--muted-foreground)" 
                           fontSize={11} 
                           tickLine={false} 
                           axisLine={false} 
@@ -253,7 +253,7 @@ export default function AnalyticsPage() {
                           tickFormatter={(v) => `${v}kg`}
                         />
                         <Tooltip 
-                          contentStyle={{ backgroundColor: '#0a0a0a', borderColor: '#262626', borderRadius: '8px', color: '#fff' }}
+                          contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', borderRadius: '8px', color: 'var(--foreground)' }}
                         />
                         <Area 
                           type="monotone" 
@@ -267,10 +267,10 @@ export default function AnalyticsPage() {
                     </ResponsiveContainer>
                   </div>
                 ) : (
-                  <div className="h-[300px] flex flex-col items-center justify-center text-center text-neutral-500 space-y-2">
-                    <Scale className="h-10 w-10 text-neutral-600 animate-pulse" />
-                    <p className="text-sm font-semibold">Not enough weight data</p>
-                    <p className="text-xs text-neutral-500 max-w-[280px]">Add at least 2 entries in the BMI history to plot weight trends.</p>
+                  <div className="h-[300px] flex flex-col items-center justify-center text-center text-muted-foreground space-y-2">
+                    <Scale className="h-10 w-10 text-muted-foreground" />
+                    <p className="text-sm font-semibold text-foreground">Not enough weight data</p>
+                    <p className="text-xs text-muted-foreground/80 max-w-[280px]">Add at least 2 entries in the BMI history to plot weight trends.</p>
                   </div>
                 )}
               </TabsContent>
@@ -283,27 +283,27 @@ export default function AnalyticsPage() {
                       <BarChart data={activeCaloriesData}>
                         <defs>
                           <linearGradient id="burnGlow" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#f97316" stopOpacity={0.8}/>
-                            <stop offset="95%" stopColor="#f97316" stopOpacity={0.1}/>
+                            <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.85}/>
+                            <stop offset="95%" stopColor="var(--primary)" stopOpacity={0.15}/>
                           </linearGradient>
                         </defs>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#171717" vertical={false} />
+                        <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
                         <XAxis 
                           dataKey="date" 
-                          stroke="#737373" 
+                          stroke="var(--muted-foreground)" 
                           fontSize={11} 
                           tickLine={false} 
                           axisLine={false} 
                         />
                         <YAxis 
-                          stroke="#737373" 
+                          stroke="var(--muted-foreground)" 
                           fontSize={11} 
                           tickLine={false} 
                           axisLine={false} 
                           tickFormatter={(v) => `${v} kcal`}
                         />
                         <Tooltip 
-                          contentStyle={{ backgroundColor: '#0a0a0a', borderColor: '#262626', borderRadius: '8px', color: '#fff' }}
+                          contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', borderRadius: '8px', color: 'var(--foreground)' }}
                         />
                         <Bar 
                           dataKey="calories_burned" 
@@ -315,10 +315,10 @@ export default function AnalyticsPage() {
                     </ResponsiveContainer>
                   </div>
                 ) : (
-                  <div className="h-[300px] flex flex-col items-center justify-center text-center text-neutral-500 space-y-2">
-                    <Flame className="h-10 w-10 text-neutral-600 animate-pulse" />
-                    <p className="text-sm font-semibold">No workout activity logged</p>
-                    <p className="text-xs text-neutral-500 max-w-[280px]">Add logged sessions in the Workout tracker to visualize active energy trends.</p>
+                  <div className="h-[300px] flex flex-col items-center justify-center text-center text-muted-foreground space-y-2">
+                    <Flame className="h-10 w-10 text-muted-foreground" />
+                    <p className="text-sm font-semibold text-foreground">No workout activity logged</p>
+                    <p className="text-xs text-muted-foreground/80 max-w-[280px]">Add logged sessions in the Workout tracker to visualize active energy trends.</p>
                   </div>
                 )}
               </TabsContent>
@@ -329,30 +329,30 @@ export default function AnalyticsPage() {
                   <div className="h-[350px] w-full">
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart data={calorieBudgetData}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#171717" vertical={false} />
+                        <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
                         <XAxis 
                           dataKey="recorded_at" 
-                          stroke="#737373" 
+                          stroke="var(--muted-foreground)" 
                           fontSize={11} 
                           tickLine={false} 
                           axisLine={false} 
                         />
                         <YAxis 
-                          stroke="#737373" 
+                          stroke="var(--muted-foreground)" 
                           fontSize={11} 
                           tickLine={false} 
                           axisLine={false} 
                           tickFormatter={(v) => `${v} kcal`}
                         />
                         <Tooltip 
-                          contentStyle={{ backgroundColor: '#0a0a0a', borderColor: '#262626', borderRadius: '8px', color: '#fff' }}
+                          contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', borderRadius: '8px', color: 'var(--foreground)' }}
                         />
                         <Line 
                           type="monotone" 
                           dataKey="target_calories" 
-                          stroke="#f59e0b" 
+                          stroke="var(--primary)" 
                           strokeWidth={2.5}
-                          dot={{ fill: '#f59e0b', r: 4 }}
+                          dot={{ fill: 'var(--primary)', r: 4 }}
                           activeDot={{ r: 6 }}
                           name="Daily Target"
                         />
@@ -360,10 +360,10 @@ export default function AnalyticsPage() {
                     </ResponsiveContainer>
                   </div>
                 ) : (
-                  <div className="h-[300px] flex flex-col items-center justify-center text-center text-neutral-500 space-y-2">
-                    <TrendingUp className="h-10 w-10 text-neutral-600 animate-pulse" />
-                    <p className="text-sm font-semibold">No daily calorie goals set</p>
-                    <p className="text-xs text-neutral-500 max-w-[280px]">Use the Calorie Calculator to save multiple targets and monitor adjustments here.</p>
+                  <div className="h-[300px] flex flex-col items-center justify-center text-center text-muted-foreground space-y-2">
+                    <TrendingUp className="h-10 w-10 text-muted-foreground" />
+                    <p className="text-sm font-semibold text-foreground">No daily calorie goals set</p>
+                    <p className="text-xs text-muted-foreground/80 max-w-[280px]">Use the Calorie Calculator to save multiple targets and monitor adjustments here.</p>
                   </div>
                 )}
               </TabsContent>

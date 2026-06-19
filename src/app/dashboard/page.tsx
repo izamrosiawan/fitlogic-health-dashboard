@@ -8,7 +8,7 @@ import { CalorieWidget } from '@/components/dashboard/CalorieWidget'
 import { WorkoutWidget } from '@/components/dashboard/WorkoutWidget'
 import { ProgressOverview } from '@/components/dashboard/ProgressOverview'
 import { PageContainer } from '@/components/layout/PageContainer'
-import { Loader2 } from 'lucide-react'
+import { Loader2, User, Activity, Flame, Dumbbell, TrendingUp } from 'lucide-react'
 
 export default function DashboardPage() {
   const supabase = createClient()
@@ -117,8 +117,8 @@ export default function DashboardPage() {
     return (
       <PageContainer title="Dashboard" description="Loading your profile and trends...">
         <div className="flex flex-col items-center justify-center py-40 space-y-4">
-          <Loader2 className="h-10 w-10 animate-spin text-orange-500" />
-          <span className="text-sm font-semibold text-neutral-400">Loading Dashboard...</span>
+          <Loader2 className="h-10 w-10 animate-spin text-primary" />
+          <span className="text-sm font-semibold text-muted-foreground">Loading Dashboard...</span>
         </div>
       </PageContainer>
     )
@@ -132,6 +132,71 @@ export default function DashboardPage() {
       <div className="space-y-6">
         {/* Welcome Section */}
         <WelcomeSection userName={displayName} />
+
+        {/* Onboarding Guide: Mulai Dari Sini */}
+        <div className="bg-card border border-border rounded-2xl p-5 relative overflow-hidden text-card-foreground">
+          <div className="relative z-10 space-y-4">
+            <div>
+              <h3 className="text-sm font-semibold tracking-tight text-foreground flex items-center gap-2">
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">i</span>
+                Panduan Penggunaan FitLogic (Mulai Dari Sini)
+              </h3>
+              <p className="text-xs text-muted-foreground mt-1">Ikuti 5 langkah sederhana berikut untuk menyusun program diet dan memantau progres kebugaran Anda:</p>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-5 gap-3">
+              <a href="/dashboard/profile" className="flex items-center gap-3 p-3 bg-muted/40 hover:bg-muted/80 border border-border hover:border-primary/30 rounded-xl transition-all group">
+                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                  <User className="h-4 w-4" />
+                </div>
+                <div className="space-y-0.5">
+                  <p className="text-xs font-semibold text-foreground group-hover:text-primary transition-colors">1. Lengkapi Profil</p>
+                  <p className="text-[10px] text-muted-foreground leading-tight">Lengkapi tinggi, berat, & target di halaman profil.</p>
+                </div>
+              </a>
+
+              <a href="/dashboard/bmi" className="flex items-center gap-3 p-3 bg-muted/40 hover:bg-muted/80 border border-border hover:border-primary/30 rounded-xl transition-all group">
+                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                  <Activity className="h-4 w-4" />
+                </div>
+                <div className="space-y-0.5">
+                  <p className="text-xs font-semibold text-foreground group-hover:text-primary transition-colors">2. Hitung BMI</p>
+                  <p className="text-[10px] text-muted-foreground leading-tight">Ukur indeks massa tubuh & status awal berat badan.</p>
+                </div>
+              </a>
+
+              <a href="/dashboard/calorie" className="flex items-center gap-3 p-3 bg-muted/40 hover:bg-muted/80 border border-border hover:border-primary/30 rounded-xl transition-all group">
+                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                  <Flame className="h-4 w-4" />
+                </div>
+                <div className="space-y-0.5">
+                  <p className="text-xs font-semibold text-foreground group-hover:text-primary transition-colors">3. Hitung Kalori</p>
+                  <p className="text-[10px] text-muted-foreground leading-tight">Hitung BMR, TDEE, & rancang target kalori harian.</p>
+                </div>
+              </a>
+
+              <a href="/dashboard/workouts" className="flex items-center gap-3 p-3 bg-muted/40 hover:bg-muted/80 border border-border hover:border-primary/30 rounded-xl transition-all group">
+                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                  <Dumbbell className="h-4 w-4" />
+                </div>
+                <div className="space-y-0.5">
+                  <p className="text-xs font-semibold text-foreground group-hover:text-primary transition-colors">4. Catat Workout</p>
+                  <p className="text-[10px] text-muted-foreground leading-tight">Catat latihan olahraga & total kalori terbakar.</p>
+                </div>
+              </a>
+
+              <a href="/dashboard/analytics" className="flex items-center gap-3 p-3 bg-muted/40 hover:bg-muted/80 border border-border hover:border-primary/30 rounded-xl transition-all group">
+                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                  <TrendingUp className="h-4 w-4" />
+                </div>
+                <div className="space-y-0.5">
+                  <p className="text-xs font-semibold text-foreground group-hover:text-primary transition-colors">5. Pantau Progres</p>
+                  <p className="text-[10px] text-muted-foreground leading-tight">Lihat tren perkembangan berat & olahraga Anda.</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
 
         {/* Widgets Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

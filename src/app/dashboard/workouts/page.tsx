@@ -166,32 +166,32 @@ export default function WorkoutsPage() {
     >
       {/* Top summary cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
-        <Card className="bg-neutral-950 border-neutral-900 flex items-center justify-between p-6 hover:border-neutral-800 transition-all">
+        <Card className="bg-card border-border flex items-center justify-between p-6 hover:shadow-xs transition-all text-card-foreground">
           <div className="space-y-1">
-            <p className="text-xs text-neutral-400 font-bold uppercase">Total Workouts</p>
-            <h3 className="text-2xl font-extrabold text-white">{totalWorkouts} sessions</h3>
+            <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">Total Workouts</p>
+            <h3 className="text-2xl font-semibold tracking-tight text-foreground">{totalWorkouts} sessions</h3>
           </div>
-          <div className="h-10 w-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center">
+          <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
             <Dumbbell className="h-5 w-5" />
           </div>
         </Card>
 
-        <Card className="bg-neutral-950 border-neutral-900 flex items-center justify-between p-6 hover:border-neutral-800 transition-all">
+        <Card className="bg-card border-border flex items-center justify-between p-6 hover:shadow-xs transition-all text-card-foreground">
           <div className="space-y-1">
-            <p className="text-xs text-neutral-400 font-bold uppercase">Total Duration</p>
-            <h3 className="text-2xl font-extrabold text-white">{totalMinutes} min</h3>
+            <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">Total Duration</p>
+            <h3 className="text-2xl font-semibold tracking-tight text-foreground">{totalMinutes} min</h3>
           </div>
-          <div className="h-10 w-10 rounded-xl bg-sky-500/10 text-sky-500 flex items-center justify-center">
+          <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
             <Clock className="h-5 w-5" />
           </div>
         </Card>
 
-        <Card className="bg-neutral-950 border-neutral-900 flex items-center justify-between p-6 hover:border-neutral-800 transition-all">
+        <Card className="bg-card border-border flex items-center justify-between p-6 hover:shadow-xs transition-all text-card-foreground">
           <div className="space-y-1">
-            <p className="text-xs text-neutral-400 font-bold uppercase">Total Calories Burned</p>
-            <h3 className="text-2xl font-extrabold text-white">{totalKcal} kcal</h3>
+            <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">Total Calories Burned</p>
+            <h3 className="text-2xl font-semibold tracking-tight text-foreground">{totalKcal} kcal</h3>
           </div>
-          <div className="h-10 w-10 rounded-xl bg-orange-500/10 text-orange-500 flex items-center justify-center">
+          <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
             <Flame className="h-5 w-5" />
           </div>
         </Card>
@@ -200,12 +200,12 @@ export default function WorkoutsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
         {/* Add Workout Form */}
         <div className="lg:col-span-1">
-          <Card className="bg-neutral-950 border-neutral-900 glass-panel">
+          <Card className="bg-card border-border text-card-foreground">
             <CardHeader>
-              <CardTitle className="text-white flex items-center gap-2">
-                <Plus className="h-5 w-5 text-orange-500" /> Log Session
+              <CardTitle className="text-foreground flex items-center gap-2 text-lg font-semibold tracking-tight">
+                <Plus className="h-5 w-5 text-primary" /> Log Session
               </CardTitle>
-              <CardDescription className="text-neutral-400">
+              <CardDescription className="text-muted-foreground">
                 Log a completed exercise session
               </CardDescription>
             </CardHeader>
@@ -213,14 +213,14 @@ export default function WorkoutsPage() {
               <CardContent className="space-y-4">
                 {/* Workout Name */}
                 <div className="space-y-1.5">
-                  <Label htmlFor="name" className="text-neutral-300 font-medium">Activity Name</Label>
+                  <Label htmlFor="name" className="text-foreground font-medium">Activity Name</Label>
                   <Input
                     id="name"
                     type="text"
                     placeholder="e.g. Morning Run, Push Gym Day"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="bg-neutral-900/50 border-neutral-800 focus:border-orange-500 text-white h-10 rounded-xl"
+                    className="bg-background border-border focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground h-10 rounded-xl"
                     required
                   />
                 </div>
@@ -228,27 +228,27 @@ export default function WorkoutsPage() {
                 {/* Duration / Calories in columns */}
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <Label htmlFor="duration" className="text-neutral-300 font-medium">Duration (min)</Label>
+                    <Label htmlFor="duration" className="text-foreground font-medium">Duration (min)</Label>
                     <Input
                       id="duration"
                       type="number"
                       placeholder="e.g. 45"
                       value={duration}
                       onChange={(e) => setDuration(e.target.value)}
-                      className="bg-neutral-900/50 border-neutral-800 focus:border-orange-500 text-white h-10 rounded-xl"
+                      className="bg-background border-border focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground h-10 rounded-xl"
                       required
                     />
                   </div>
 
                   <div className="space-y-1.5">
-                    <Label htmlFor="calories" className="text-neutral-300 font-medium">Burn (kcal)</Label>
+                    <Label htmlFor="calories" className="text-foreground font-medium">Burn (kcal)</Label>
                     <Input
                       id="calories"
                       type="number"
                       placeholder="e.g. 400"
                       value={caloriesBurned}
                       onChange={(e) => setCaloriesBurned(e.target.value)}
-                      className="bg-neutral-900/50 border-neutral-800 focus:border-orange-500 text-white h-10 rounded-xl"
+                      className="bg-background border-border focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground h-10 rounded-xl"
                       required
                     />
                   </div>
@@ -256,15 +256,15 @@ export default function WorkoutsPage() {
 
                 {/* Date */}
                 <div className="space-y-1.5">
-                  <Label htmlFor="date" className="text-neutral-300 font-medium">Date</Label>
+                  <Label htmlFor="date" className="text-foreground font-medium">Date</Label>
                   <div className="relative">
-                    <Calendar className="absolute left-3 top-2.5 h-4.5 w-4.5 text-neutral-500 pointer-events-none" />
+                    <Calendar className="absolute left-3 top-2.5 h-4.5 w-4.5 text-muted-foreground pointer-events-none" />
                     <Input
                       id="date"
                       type="date"
                       value={date}
                       onChange={(e) => setDate(e.target.value)}
-                      className="pl-10 bg-neutral-900/50 border-neutral-800 focus:border-orange-500 text-white h-10 rounded-xl"
+                      className="pl-10 bg-background border-border focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground h-10 rounded-xl"
                       required
                     />
                   </div>
@@ -272,13 +272,13 @@ export default function WorkoutsPage() {
 
                 {/* Notes */}
                 <div className="space-y-1.5">
-                  <Label htmlFor="notes" className="text-neutral-300 font-medium">Notes (optional)</Label>
+                  <Label htmlFor="notes" className="text-foreground font-medium">Notes (optional)</Label>
                   <textarea
                     id="notes"
                     placeholder="e.g. Felt highly energetic, campus route"
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
-                    className="w-full bg-neutral-900/50 border border-neutral-800 focus:border-orange-500 focus:ring-3 focus:ring-orange-500/20 text-white p-2.5 text-sm rounded-xl min-h-[80px] outline-none transition-colors"
+                    className="w-full bg-background border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground p-2.5 text-sm rounded-xl min-h-[80px] outline-none transition-colors"
                   />
                 </div>
               </CardContent>
@@ -286,7 +286,7 @@ export default function WorkoutsPage() {
                 <Button
                   type="submit"
                   disabled={submitting}
-                  className="w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold h-10 rounded-xl cursor-pointer"
+                  className="w-full bg-primary hover:bg-primary-focus text-white font-semibold h-10 rounded-xl cursor-pointer transition-colors shadow-xs"
                 >
                   {submitting ? (
                     <Loader2 className="h-5 w-5 animate-spin" />
@@ -301,11 +301,11 @@ export default function WorkoutsPage() {
 
         {/* History List */}
         <div className="lg:col-span-2">
-          <Card className="bg-neutral-950 border-neutral-900 h-full">
+          <Card className="bg-card border-border h-full text-card-foreground shadow-xs">
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
-                <CardTitle className="text-white">Workout Sessions</CardTitle>
-                <CardDescription className="text-neutral-400">
+                <CardTitle className="text-foreground text-lg font-semibold tracking-tight">Workout Sessions</CardTitle>
+                <CardDescription className="text-muted-foreground">
                   Detailed logs of logged exercise activities
                 </CardDescription>
               </div>
@@ -313,7 +313,7 @@ export default function WorkoutsPage() {
                 variant="outline"
                 size="icon"
                 onClick={fetchWorkouts}
-                className="border-neutral-800 hover:bg-neutral-900 text-neutral-400 cursor-pointer h-8 w-8"
+                className="border-border hover:bg-muted text-muted-foreground cursor-pointer h-8 w-8"
                 disabled={loadingWorkouts}
               >
                 <RefreshCw className={`h-4 w-4 ${loadingWorkouts ? 'animate-spin' : ''}`} />
@@ -321,27 +321,27 @@ export default function WorkoutsPage() {
             </CardHeader>
             <CardContent>
               {loadingWorkouts ? (
-                <div className="flex flex-col items-center justify-center py-20 text-neutral-500 space-y-2">
-                  <Loader2 className="h-8 w-8 animate-spin text-orange-500" />
+                <div className="flex flex-col items-center justify-center py-20 text-muted-foreground space-y-2">
+                  <Loader2 className="h-8 w-8 animate-spin text-primary" />
                   <span className="text-sm font-semibold">Loading logs...</span>
                 </div>
               ) : workouts.length > 0 ? (
                 <div className="overflow-x-auto">
                   <Table>
-                    <TableHeader className="border-neutral-900">
-                      <TableRow className="border-neutral-900 hover:bg-transparent">
-                        <TableHead className="text-neutral-400 font-bold">Activity</TableHead>
-                        <TableHead className="text-neutral-400 font-bold">Date</TableHead>
-                        <TableHead className="text-neutral-400 font-bold">Duration</TableHead>
-                        <TableHead className="text-neutral-400 font-bold">Burned</TableHead>
-                        <TableHead className="text-neutral-400 font-bold">Notes</TableHead>
-                        <TableHead className="text-neutral-400 font-bold text-right">Action</TableHead>
+                    <TableHeader className="border-border">
+                      <TableRow className="border-border hover:bg-transparent">
+                        <TableHead className="text-muted-foreground font-semibold">Activity</TableHead>
+                        <TableHead className="text-muted-foreground font-semibold">Date</TableHead>
+                        <TableHead className="text-muted-foreground font-semibold">Duration</TableHead>
+                        <TableHead className="text-muted-foreground font-semibold">Burned</TableHead>
+                        <TableHead className="text-muted-foreground font-semibold">Notes</TableHead>
+                        <TableHead className="text-muted-foreground font-semibold text-right">Action</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {workouts.map((w) => (
-                        <TableRow key={w.id} className="border-neutral-900 hover:bg-neutral-900/30 text-neutral-200">
-                          <TableCell className="font-extrabold text-white">{w.name}</TableCell>
+                        <TableRow key={w.id} className="border-border hover:bg-muted/40 text-foreground">
+                          <TableCell className="font-semibold text-foreground">{w.name}</TableCell>
                           <TableCell className="font-semibold text-xs whitespace-nowrap">
                             {new Date(w.date).toLocaleDateString('en-US', {
                               month: 'short',
@@ -350,8 +350,8 @@ export default function WorkoutsPage() {
                             })}
                           </TableCell>
                           <TableCell className="font-medium text-xs whitespace-nowrap">{w.duration} min</TableCell>
-                          <TableCell className="font-extrabold text-orange-500 text-sm whitespace-nowrap">{w.calories_burned} kcal</TableCell>
-                          <TableCell className="max-w-[200px] text-xs text-neutral-400 truncate font-medium">
+                          <TableCell className="font-semibold text-primary text-sm whitespace-nowrap">{w.calories_burned} kcal</TableCell>
+                          <TableCell className="max-w-[200px] text-xs text-muted-foreground truncate font-medium">
                             {w.notes || '-'}
                           </TableCell>
                           <TableCell className="text-right">
@@ -359,7 +359,7 @@ export default function WorkoutsPage() {
                               variant="ghost"
                               size="icon"
                               onClick={() => handleDelete(w.id)}
-                              className="text-red-400 hover:bg-red-500/10 hover:text-red-300 cursor-pointer h-7 w-7"
+                              className="text-destructive hover:bg-destructive/10 hover:text-destructive cursor-pointer h-7 w-7"
                               disabled={deletingId === w.id}
                             >
                               {deletingId === w.id ? (
@@ -376,9 +376,9 @@ export default function WorkoutsPage() {
                 </div>
               ) : (
                 <div className="flex flex-col items-center justify-center text-center py-20 space-y-3">
-                  <Dumbbell className="h-12 w-12 text-neutral-600 animate-pulse" />
-                  <p className="text-base font-bold text-neutral-400">No logged workouts yet</p>
-                  <p className="text-xs text-neutral-500 max-w-sm">Use the form on the left to log your first exercise session and start counting calories.</p>
+                  <Dumbbell className="h-12 w-12 text-muted-foreground" />
+                  <p className="text-base font-semibold text-muted-foreground">No logged workouts yet</p>
+                  <p className="text-xs text-muted-foreground max-w-sm">Use the form on the left to log your first exercise session and start counting calories.</p>
                 </div>
               )}
             </CardContent>

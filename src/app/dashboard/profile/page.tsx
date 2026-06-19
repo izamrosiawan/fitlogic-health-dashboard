@@ -162,8 +162,8 @@ export default function ProfilePage() {
       description="Update your details, customize fitness targets, and manage security settings."
     >
       {loading ? (
-        <div className="flex flex-col items-center justify-center py-40 text-neutral-500 space-y-2">
-          <Loader2 className="h-8 w-8 animate-spin text-orange-500" />
+        <div className="flex flex-col items-center justify-center py-40 text-muted-foreground space-y-2">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
           <span className="text-sm font-semibold">Loading profile settings...</span>
         </div>
       ) : (
@@ -171,37 +171,37 @@ export default function ProfilePage() {
           
           {/* General Information Card */}
           <div className="lg:col-span-1 space-y-6">
-            <Card className="bg-neutral-950 border-neutral-900 glass-panel">
+            <Card className="bg-card border-border text-card-foreground">
               <CardHeader className="pb-4">
                 <div className="flex items-center gap-4">
-                  <div className="h-14 w-14 rounded-2xl bg-gradient-to-tr from-orange-500 to-amber-400 flex items-center justify-center font-bold text-white text-xl shadow-md shadow-orange-500/10">
+                  <div className="h-14 w-14 rounded-2xl bg-primary flex items-center justify-center font-bold text-primary-foreground text-xl">
                     {fullName ? fullName[0].toUpperCase() : <User className="h-6 w-6" />}
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-white leading-snug">{fullName || 'Fitness Enthusiast'}</h3>
-                    <p className="text-xs text-neutral-400 font-medium">{email}</p>
+                    <h3 className="text-lg font-semibold tracking-tight text-foreground leading-snug">{fullName || 'Fitness Enthusiast'}</h3>
+                    <p className="text-xs text-muted-foreground font-medium">{email}</p>
                   </div>
                 </div>
               </CardHeader>
-              <CardContent className="border-t border-neutral-900 pt-4 space-y-3 text-xs font-semibold text-neutral-400">
+              <CardContent className="border-t border-border pt-4 space-y-3 text-xs font-semibold text-muted-foreground">
                 <div className="flex justify-between items-center py-1">
-                  <span className="flex items-center gap-1.5"><Calendar className="h-3.5 w-3.5 text-orange-500" /> Member Since</span>
-                  <span className="text-white">{joinDate}</span>
+                  <span className="flex items-center gap-1.5"><Calendar className="h-3.5 w-3.5 text-primary" /> Member Since</span>
+                  <span className="text-foreground">{joinDate}</span>
                 </div>
                 <div className="flex justify-between items-center py-1">
-                  <span className="flex items-center gap-1.5"><Shield className="h-3.5 w-3.5 text-emerald-400" /> Status</span>
-                  <span className="text-emerald-400 font-bold bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full uppercase text-[10px]">Verified</span>
+                  <span className="flex items-center gap-1.5"><Shield className="h-3.5 w-3.5 text-emerald-500" /> Status</span>
+                  <span className="text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full uppercase text-[10px]">Verified</span>
                 </div>
               </CardContent>
             </Card>
 
             {/* Quote details */}
-            <Card className="bg-neutral-950 border-neutral-900 bg-gradient-to-br from-orange-500/5 to-neutral-950">
+            <Card className="bg-card border border-border text-card-foreground">
               <CardContent className="p-5 space-y-3">
-                <h4 className="text-sm font-bold text-white flex items-center gap-2">
-                  <Sparkles className="h-4 w-4 text-orange-500" /> FitLogic Guidelines
+                <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
+                  <Sparkles className="h-4 w-4 text-primary" /> FitLogic Guidelines
                 </h4>
-                <p className="text-xs text-neutral-400 leading-relaxed font-medium">
+                <p className="text-xs text-muted-foreground leading-relaxed font-medium">
                   Update your weight and height here to keep BMI history updated. Setting target weight and target calories helps display visual bounds throughout calculators.
                 </p>
               </CardContent>
@@ -210,12 +210,12 @@ export default function ProfilePage() {
 
           {/* Edit Profile Form */}
           <div className="lg:col-span-2 space-y-6">
-            <Card className="bg-neutral-950 border-neutral-900">
+            <Card className="bg-card border-border text-card-foreground">
               <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">
-                  <User className="h-5 w-5 text-orange-500" /> Account & Goals
+                <CardTitle className="text-foreground flex items-center gap-2 text-lg font-semibold tracking-tight">
+                  <User className="h-5 w-5 text-primary" /> Account & Goals
                 </CardTitle>
-                <CardDescription className="text-neutral-400">
+                <CardDescription className="text-muted-foreground">
                   Update your display details and set targets for dashboard benchmarks
                 </CardDescription>
               </CardHeader>
@@ -224,21 +224,21 @@ export default function ProfilePage() {
                   
                   {/* General Profile fields */}
                   <div className="space-y-4">
-                    <h3 className="text-sm font-bold text-neutral-400 uppercase tracking-wider">Display Details</h3>
+                    <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Display Details</h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div className="space-y-1.5 md:col-span-1">
-                        <Label htmlFor="fullName" className="text-neutral-300 font-medium">Full Name</Label>
+                        <Label htmlFor="fullName" className="text-foreground font-medium">Full Name</Label>
                         <Input
                           id="fullName"
                           type="text"
                           value={fullName}
                           onChange={(e) => setFullName(e.target.value)}
-                          className="bg-neutral-900/50 border-neutral-800 focus:border-orange-500 text-white h-10 rounded-xl"
+                          className="bg-background border-border focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground h-10 rounded-xl"
                           required
                         />
                       </div>
                       <div className="space-y-1.5">
-                        <Label htmlFor="height" className="text-neutral-300 font-medium">Height (cm)</Label>
+                        <Label htmlFor="height" className="text-foreground font-medium">Height (cm)</Label>
                         <Input
                           id="height"
                           type="number"
@@ -246,11 +246,11 @@ export default function ProfilePage() {
                           placeholder="e.g. 175"
                           value={height}
                           onChange={(e) => setHeight(e.target.value)}
-                          className="bg-neutral-900/50 border-neutral-800 focus:border-orange-500 text-white h-10 rounded-xl"
+                          className="bg-background border-border focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground h-10 rounded-xl"
                         />
                       </div>
                       <div className="space-y-1.5">
-                        <Label htmlFor="weight" className="text-neutral-300 font-medium">Current Weight (kg)</Label>
+                        <Label htmlFor="weight" className="text-foreground font-medium">Current Weight (kg)</Label>
                         <Input
                           id="weight"
                           type="number"
@@ -258,18 +258,18 @@ export default function ProfilePage() {
                           placeholder="e.g. 72.5"
                           value={weight}
                           onChange={(e) => setWeight(e.target.value)}
-                          className="bg-neutral-900/50 border-neutral-800 focus:border-orange-500 text-white h-10 rounded-xl"
+                          className="bg-background border-border focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground h-10 rounded-xl"
                         />
                       </div>
                     </div>
                   </div>
 
                   {/* Target Goal fields */}
-                  <div className="space-y-4 border-t border-neutral-900 pt-6">
-                    <h3 className="text-sm font-bold text-neutral-400 uppercase tracking-wider">Fitness Targets</h3>
+                  <div className="space-y-4 border-t border-border pt-6">
+                    <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Fitness Targets</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-1.5">
-                        <Label htmlFor="targetWeight" className="text-neutral-300 font-medium">Target Weight (kg)</Label>
+                        <Label htmlFor="targetWeight" className="text-foreground font-medium">Target Weight (kg)</Label>
                         <Input
                           id="targetWeight"
                           type="number"
@@ -277,29 +277,29 @@ export default function ProfilePage() {
                           placeholder="e.g. 70.0"
                           value={targetWeight}
                           onChange={(e) => setTargetWeight(e.target.value)}
-                          className="bg-neutral-900/50 border-neutral-800 focus:border-orange-500 text-white h-10 rounded-xl"
+                          className="bg-background border-border focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground h-10 rounded-xl"
                         />
                       </div>
                       <div className="space-y-1.5">
-                        <Label htmlFor="targetCalories" className="text-neutral-300 font-medium">Target Daily Calories (kcal)</Label>
+                        <Label htmlFor="targetCalories" className="text-foreground font-medium">Target Daily Calories (kcal)</Label>
                         <Input
                           id="targetCalories"
                           type="number"
                           placeholder="e.g. 2200"
                           value={targetCalories}
                           onChange={(e) => setTargetCalories(e.target.value)}
-                          className="bg-neutral-900/50 border-neutral-800 focus:border-orange-500 text-white h-10 rounded-xl"
+                          className="bg-background border-border focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground h-10 rounded-xl"
                         />
                       </div>
                     </div>
                   </div>
 
                 </CardContent>
-                <CardFooter className="border-t border-neutral-900 pt-4 flex justify-end">
+                <CardFooter className="border-t border-border pt-4 flex justify-end">
                   <Button
                     type="submit"
                     disabled={updatingProfile}
-                    className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold h-10 rounded-xl cursor-pointer flex items-center gap-2"
+                    className="bg-primary hover:bg-primary-focus text-white font-semibold h-10 rounded-xl cursor-pointer flex items-center gap-2 transition-colors shadow-xs"
                   >
                     {updatingProfile ? (
                       <Loader2 className="h-5 w-5 animate-spin" />
@@ -314,12 +314,12 @@ export default function ProfilePage() {
             </Card>
 
             {/* Change Password Card */}
-            <Card className="bg-neutral-950 border-neutral-900">
+            <Card className="bg-card border-border text-card-foreground">
               <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">
-                  <Key className="h-5 w-5 text-amber-500" /> Security settings
+                <CardTitle className="text-foreground flex items-center gap-2 text-lg font-semibold tracking-tight">
+                  <Key className="h-5 w-5 text-primary" /> Security settings
                 </CardTitle>
-                <CardDescription className="text-neutral-400">
+                <CardDescription className="text-muted-foreground">
                   Update password authentication credentials
                 </CardDescription>
               </CardHeader>
@@ -327,44 +327,44 @@ export default function ProfilePage() {
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
-                      <Label htmlFor="pass" className="text-neutral-300 font-medium">New Password</Label>
+                      <Label htmlFor="pass" className="text-foreground font-medium">New Password</Label>
                       <Input
                         id="pass"
                         type="password"
                         placeholder="••••••••"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="bg-neutral-900/50 border-neutral-800 focus:border-orange-500 text-white h-10 rounded-xl"
+                        className="bg-background border-border focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground h-10 rounded-xl"
                         required
                         disabled={updatingPassword}
                       />
                     </div>
                     <div className="space-y-1.5">
-                      <Label htmlFor="confPass" className="text-neutral-300 font-medium">Confirm Password</Label>
+                      <Label htmlFor="confPass" className="text-foreground font-medium">Confirm Password</Label>
                       <Input
                         id="confPass"
                         type="password"
                         placeholder="••••••••"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="bg-neutral-900/50 border-neutral-800 focus:border-orange-500 text-white h-10 rounded-xl"
+                        className="bg-background border-border focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground h-10 rounded-xl"
                         required
                         disabled={updatingPassword}
                       />
                     </div>
                   </div>
                 </CardContent>
-                <CardFooter className="border-t border-neutral-900 pt-4 flex justify-end">
+                <CardFooter className="border-t border-border pt-4 flex justify-end">
                   <Button
                     type="submit"
                     disabled={updatingPassword}
-                    className="bg-neutral-900 hover:bg-neutral-850 border border-neutral-800 text-white font-bold h-10 rounded-xl cursor-pointer flex items-center gap-2"
+                    className="bg-background hover:bg-muted border border-border text-primary font-semibold h-10 rounded-xl cursor-pointer flex items-center gap-2 transition-colors"
                   >
                     {updatingPassword ? (
                       <Loader2 className="h-5 w-5 animate-spin" />
                     ) : (
                       <>
-                        <Key className="h-4.5 w-4.5 text-amber-400" /> Change Password
+                        <Key className="h-4.5 w-4.5 text-primary" /> Change Password
                       </>
                     )}
                   </Button>
@@ -372,7 +372,6 @@ export default function ProfilePage() {
               </form>
             </Card>
           </div>
-
         </div>
       )}
     </PageContainer>

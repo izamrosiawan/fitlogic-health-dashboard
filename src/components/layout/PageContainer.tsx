@@ -21,11 +21,11 @@ export function PageContainer({ title, description, action, children }: PageCont
     >
       <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl bg-clip-text text-transparent bg-gradient-to-r from-orange-500 via-amber-400 to-emerald-400">
+          <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl text-foreground">
             {title}
           </h1>
           {description && (
-            <p className="mt-1 text-sm text-neutral-400 font-medium">
+            <p className="mt-1 text-sm text-muted-foreground font-medium">
               {description}
             </p>
           )}

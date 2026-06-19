@@ -21,8 +21,8 @@ export function ProgressOverview({ data }: ProgressOverviewProps) {
 
   if (!mounted) {
     return (
-      <Card className="bg-neutral-950 border-neutral-900 col-span-1 md:col-span-3 h-[300px]">
-        <CardContent className="h-full flex items-center justify-center text-neutral-500">
+      <Card className="border border-border bg-card col-span-1 md:col-span-3 h-[300px] text-card-foreground">
+        <CardContent className="h-full flex items-center justify-center text-muted-foreground">
           Loading chart...
         </CardContent>
       </Card>
@@ -30,28 +30,28 @@ export function ProgressOverview({ data }: ProgressOverviewProps) {
   }
 
   return (
-    <Card className="bg-neutral-950 border-neutral-900 col-span-1 md:col-span-3 hover:border-neutral-800 transition-all">
+    <Card className="border border-border col-span-1 md:col-span-3 hover:shadow-xs transition-all bg-card text-card-foreground">
       <CardHeader>
-        <CardTitle className="text-lg font-bold text-white flex items-center gap-2">
-          <TrendingUp className="h-5 w-5 text-orange-500" /> Calories Burned (Last 7 Days)
+        <CardTitle className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2">
+          <TrendingUp className="h-5 w-5 text-primary" /> Calories Burned (Last 7 Days)
         </CardTitle>
-        <CardDescription className="text-xs text-neutral-400 font-medium">Daily calorie expenditure breakdown</CardDescription>
+        <CardDescription className="text-xs text-muted-foreground font-medium">Daily calorie expenditure breakdown</CardDescription>
       </CardHeader>
       <CardContent>
         {data && data.length > 0 ? (
           <div className="h-[200px] w-full pt-4">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={data}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#171717" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
                 <XAxis 
                   dataKey="date" 
-                  stroke="#737373" 
+                  stroke="var(--muted-foreground)" 
                   fontSize={10} 
                   tickLine={false} 
                   axisLine={false} 
                 />
                 <YAxis 
-                  stroke="#737373" 
+                  stroke="var(--muted-foreground)" 
                   fontSize={10} 
                   tickLine={false} 
                   axisLine={false}
@@ -59,31 +59,31 @@ export function ProgressOverview({ data }: ProgressOverviewProps) {
                 />
                 <Tooltip 
                   contentStyle={{ 
-                    backgroundColor: '#0a0a0a', 
-                    borderColor: '#262626', 
+                    backgroundColor: 'var(--card)', 
+                    borderColor: 'var(--border)', 
                     borderRadius: '8px', 
-                    color: '#fff' 
+                    color: 'var(--foreground)' 
                   }}
-                  cursor={{ fill: 'rgba(255, 255, 255, 0.03)' }}
+                  cursor={{ fill: 'rgba(0, 0, 0, 0.03)' }}
                 />
                 <Bar 
                   dataKey="calories" 
-                  fill="url(#colorOrange)" 
+                  fill="url(#colorBlue)" 
                   radius={[4, 4, 0, 0]} 
                 />
                 <defs>
-                  <linearGradient id="colorOrange" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#f97316" stopOpacity={0.8}/>
-                    <stop offset="95%" stopColor="#f97316" stopOpacity={0.1}/>
+                  <linearGradient id="colorBlue" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.85}/>
+                    <stop offset="95%" stopColor="var(--primary)" stopOpacity={0.15}/>
                   </linearGradient>
                 </defs>
               </BarChart>
             </ResponsiveContainer>
           </div>
         ) : (
-          <div className="h-[200px] flex flex-col items-center justify-center text-center text-neutral-500 py-6 space-y-3">
+          <div className="h-[200px] flex flex-col items-center justify-center text-center text-muted-foreground py-6 space-y-3">
             <p className="text-sm font-semibold">No recent activity data</p>
-            <p className="text-xs text-neutral-500 max-w-[240px]">Log your workouts to populate daily calorie burning trends.</p>
+            <p className="text-xs text-muted-foreground max-w-[240px]">Log your workouts to populate daily calorie burning trends.</p>
           </div>
         )}
       </CardContent>

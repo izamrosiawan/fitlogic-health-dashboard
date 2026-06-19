@@ -101,10 +101,10 @@ function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen relative flex items-center justify-center p-4 bg-neutral-950 overflow-hidden">
+    <div className="min-h-screen relative flex items-center justify-center p-4 bg-background text-foreground overflow-hidden">
       {/* Decorative background glows */}
-      <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full radial-glow-orange pointer-events-none filter blur-3xl opacity-40" />
-      <div className="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-[500px] h-[500px] rounded-full radial-glow-green pointer-events-none filter blur-3xl opacity-30" />
+      <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-primary/5 pointer-events-none filter blur-3xl opacity-30" />
+      <div className="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-[500px] h-[500px] rounded-full bg-primary/5 pointer-events-none filter blur-3xl opacity-35" />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -113,35 +113,35 @@ function LoginForm() {
         className="w-full max-w-md z-10"
       >
         <div className="flex flex-col items-center mb-8">
-          <div className="h-12 w-12 rounded-2xl bg-gradient-to-tr from-orange-500 to-amber-400 flex items-center justify-center shadow-lg shadow-orange-500/20 mb-3">
-            <Activity className="h-6 w-6 text-white animate-pulse" />
+          <div className="h-12 w-12 rounded-2xl bg-primary flex items-center justify-center mb-3">
+            <Activity className="h-6 w-6 text-primary-foreground" />
           </div>
-          <h1 className="text-3xl font-extrabold tracking-wider text-white">
-            FIT<span className="text-orange-500">LOGIC</span>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">
+            FIT<span className="text-primary">LOGIC</span>
           </h1>
-          <p className="text-neutral-400 text-sm mt-1 font-medium">Smart fitness & health tracking for students</p>
+          <p className="text-muted-foreground text-sm mt-1 font-medium">Smart fitness & health tracking for students</p>
         </div>
 
-        <Card className="glass-panel-glow border-neutral-900 bg-neutral-950/60 backdrop-blur-xl">
+        <Card className="border border-border bg-card shadow-xs">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold text-white">Sign In</CardTitle>
-            <CardDescription className="text-neutral-400 font-medium">
+            <CardTitle className="text-2xl font-semibold tracking-tight text-foreground">Sign In</CardTitle>
+            <CardDescription className="text-muted-foreground font-medium">
               Enter your credentials to access your fitness dashboard
             </CardDescription>
           </CardHeader>
           <form onSubmit={handleLogin}>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-neutral-300 font-medium">Email Address</Label>
+                <Label htmlFor="email" className="text-foreground font-medium">Email Address</Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-2.5 h-4.5 w-4.5 text-neutral-500 pointer-events-none" />
+                  <Mail className="absolute left-3 top-2.5 h-4.5 w-4.5 text-muted-foreground pointer-events-none" />
                   <Input
                     id="email"
                     type="email"
                     placeholder="you@university.edu"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10 bg-neutral-900/50 border-neutral-800 focus:border-orange-500 text-white h-10 rounded-xl"
+                    className="pl-10 bg-background border-border focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground h-10 rounded-xl"
                     disabled={loading}
                     required
                   />
@@ -150,23 +150,23 @@ function LoginForm() {
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="password" className="text-neutral-300 font-medium">Password</Label>
+                  <Label htmlFor="password" className="text-foreground font-medium">Password</Label>
                   <Link
                     href="/forgot-password"
-                    className="text-xs text-orange-400 hover:text-orange-300 transition-colors font-semibold"
+                    className="text-xs text-primary hover:text-primary-focus transition-colors font-semibold"
                   >
                     Forgot password?
                   </Link>
                 </div>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-2.5 h-4.5 w-4.5 text-neutral-500 pointer-events-none" />
+                  <Lock className="absolute left-3 top-2.5 h-4.5 w-4.5 text-muted-foreground pointer-events-none" />
                   <Input
                     id="password"
                     type="password"
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10 bg-neutral-900/50 border-neutral-800 focus:border-orange-500 text-white h-10 rounded-xl"
+                    className="pl-10 bg-background border-border focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground h-10 rounded-xl"
                     disabled={loading}
                     required
                   />
@@ -178,7 +178,7 @@ function LoginForm() {
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold h-11 rounded-xl shadow-lg shadow-orange-500/10 cursor-pointer flex items-center justify-center gap-2"
+                className="w-full bg-primary hover:bg-primary-focus text-white font-semibold h-11 rounded-xl cursor-pointer flex items-center justify-center gap-2 transition-colors shadow-xs"
               >
                 {loading ? (
                   <Loader2 className="h-5 w-5 animate-spin" />
@@ -193,16 +193,16 @@ function LoginForm() {
                 type="button"
                 onClick={handleGuestLogin}
                 variant="outline"
-                className="w-full border-neutral-800 bg-neutral-900/40 hover:bg-neutral-900 text-neutral-200 font-bold h-11 rounded-xl cursor-pointer"
+                className="w-full border-border bg-muted/65 hover:bg-muted text-foreground font-semibold h-11 rounded-xl cursor-pointer"
               >
                 Access as Guest (Demo Mode)
               </Button>
 
-              <p className="text-neutral-400 text-sm text-center font-medium">
+              <p className="text-muted-foreground text-sm text-center font-medium">
                 Don't have an account?{' '}
                 <Link
                   href="/register"
-                  className="text-orange-400 hover:text-orange-300 transition-colors font-bold"
+                  className="text-primary hover:text-primary-focus transition-colors font-semibold"
                 >
                   Sign up free
                 </Link>
@@ -218,8 +218,8 @@ function LoginForm() {
 export default function LoginPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-neutral-950 text-white font-bold">
-        <Loader2 className="h-8 w-8 animate-spin text-orange-500" />
+      <div className="min-h-screen flex items-center justify-center bg-background text-foreground font-bold">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     }>
       <LoginForm />
