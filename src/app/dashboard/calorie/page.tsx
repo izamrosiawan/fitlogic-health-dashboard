@@ -455,25 +455,51 @@ export default function CaloriePage() {
   const [deletingId, setDeletingId] = useState<string | null>(null)
 
   useEffect(() => {
-    fetchRecords()
+    fetchRecordsAndProfile()
   }, [])
 
-  const fetchRecords = async () => {
+  const fetchRecordsAndProfile = async () => {
     setLoadingRecords(true)
     try {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
 
-      const { data, error } = await supabase
+      // Fetch profile data
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('height, weight, target_weight')
+        .eq('id', user.id)
+        .single()
+
+      // Fetch calorie records
+      const { data: recordsData, error } = await supabase
         .from('calorie_records')
         .select('*')
         .eq('user_id', user.id)
         .order('recorded_at', { ascending: false })
 
       if (error) throw error
-      setRecords(data || [])
+      setRecords(recordsData || [])
+
+      // Pre-populate fields using profile and latest record as fallback
+      const latestRec = recordsData?.[0] || null
+      
+      const defHeight = profile?.height || latestRec?.height
+      const defWeight = profile?.weight || latestRec?.weight
+      const defTargetWeight = profile?.target_weight || latestRec?.weight // fallback to weight if no target
+
+      if (defHeight) setHeight(defHeight.toString())
+      if (defWeight) setWeight(defWeight.toString())
+      if (defTargetWeight) setTargetWeight(defTargetWeight.toString())
+
+      if (latestRec) {
+        if (latestRec.age) setAge(latestRec.age.toString())
+        if (latestRec.gender) setGender(latestRec.gender)
+        if (latestRec.activity_level) setActivityLevel(latestRec.activity_level)
+        if (latestRec.goal) setGoal(latestRec.goal)
+      }
     } catch (err: any) {
-      toast.error('Failed to load calorie history: ' + err.message)
+      toast.error('Failed to load calorie data: ' + err.message)
     } finally {
       setLoadingRecords(false)
     }
@@ -587,19 +613,9 @@ export default function CaloriePage() {
       }
 
       toast.success('Calorie profile saved successfully!')
-      // Clear form
-      setAge('')
-      setHeight('')
-      setWeight('')
-      setTargetWeight('')
-      setBmr(null)
-      setTdee(null)
-      setTargetCalories(null)
-      setBmi(null)
-      setCalculatedTargetWeight(null)
-      
+      // Keep parameters filled on-screen to avoid sudden blank state.
       // Refresh list
-      fetchRecords()
+      fetchRecordsAndProfile()
     } catch (err: any) {
       toast.error('Failed to save calorie configuration: ' + err.message)
     } finally {
@@ -1020,7 +1036,7 @@ export default function CaloriePage() {
               <Button
                 variant="outline"
                 size="icon"
-                onClick={fetchRecords}
+                onClick={fetchRecordsAndProfile}
                 className="border-border hover:bg-muted text-muted-foreground cursor-pointer h-8 w-8"
                 disabled={loadingRecords}
               >

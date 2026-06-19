@@ -19,6 +19,8 @@ export default function DashboardPage() {
   const [workoutCount, setWorkoutCount] = useState(0)
   const [totalDuration, setTotalDuration] = useState(0)
   const [totalCalories, setTotalCalories] = useState(0)
+  const [todayBurnedCalories, setTodayBurnedCalories] = useState(0)
+  const [userId, setUserId] = useState<string>('')
   const [chartData, setChartData] = useState<any[]>([])
 
   useEffect(() => {
@@ -27,6 +29,7 @@ export default function DashboardPage() {
       try {
         const { data: { user } } = await supabase.auth.getUser()
         if (!user) return
+        setUserId(user.id)
 
         // Fetch profile
         const { data: profile } = await supabase
@@ -80,6 +83,13 @@ export default function DashboardPage() {
         setWorkoutCount(count)
         setTotalDuration(duration)
         setTotalCalories(calories)
+
+        // Compute today's active calorie burn
+        const now = new Date()
+        const todayDateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
+        const todayWorkouts = recentWorkouts?.filter((w: any) => w.date === todayDateStr) || []
+        const todayBurn = todayWorkouts.reduce((sum: number, w: any) => sum + (w.calories_burned || 0), 0)
+        setTodayBurnedCalories(todayBurn)
 
         // Build last 7 days chart data
         const tempChartData = []
@@ -201,7 +211,11 @@ export default function DashboardPage() {
         {/* Widgets Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <BmiWidget latestBmi={latestBmi} />
-          <CalorieWidget latestCalorie={latestCalorie} />
+          <CalorieWidget 
+            latestCalorie={latestCalorie} 
+            todayBurned={todayBurnedCalories}
+            userId={userId}
+          />
           <WorkoutWidget
             workoutCount={workoutCount}
             totalDuration={totalDuration}

@@ -39,14 +39,26 @@ export default function BmiPage() {
 
   // Fetch BMI records on mount
   useEffect(() => {
-    fetchRecords()
+    fetchRecordsAndProfile()
   }, [])
 
-  const fetchRecords = async () => {
+  const fetchRecordsAndProfile = async () => {
     setLoadingRecords(true)
     try {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
+
+      // Fetch profile to pre-populate inputs if they are empty
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('height, weight')
+        .eq('id', user.id)
+        .single()
+
+      if (profile) {
+        if (profile.height) setHeight(profile.height.toString())
+        if (profile.weight) setWeight(profile.weight.toString())
+      }
 
       const { data, error } = await supabase
         .from('bmi_records')
@@ -57,7 +69,7 @@ export default function BmiPage() {
       if (error) throw error
       setRecords(data || [])
     } catch (err: any) {
-      toast.error('Failed to load BMI history: ' + err.message)
+      toast.error('Failed to load BMI data: ' + err.message)
     } finally {
       setLoadingRecords(false)
     }
@@ -127,14 +139,17 @@ export default function BmiPage() {
 
       if (error) throw error
 
-      toast.success('BMI record saved successfully!')
-      // Clear form
-      setHeight('')
-      setWeight('')
+      // Update current profile height & weight to keep in sync
+      await supabase.from('profiles').update({
+        height: dbHeight,
+        weight: dbWeight
+      }).eq('id', user.id)
+
+      toast.success('BMI record saved and profile updated!')
       setCalculatedBmi(null)
       setBmiCategory('')
       // Refresh list
-      fetchRecords()
+      fetchRecordsAndProfile()
     } catch (err: any) {
       toast.error('Failed to save BMI: ' + err.message)
     } finally {
@@ -330,7 +345,7 @@ export default function BmiPage() {
               <Button
                 variant="outline"
                 size="icon"
-                onClick={fetchRecords}
+                onClick={fetchRecordsAndProfile}
                 className="border-border hover:bg-muted text-muted-foreground cursor-pointer h-8 w-8"
                 disabled={loadingRecords}
               >

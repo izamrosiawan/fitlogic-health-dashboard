@@ -1,10 +1,11 @@
 "use client"
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Flame, ArrowRight } from 'lucide-react'
+import { Flame, ArrowRight, RotateCcw, Plus } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 
 interface CalorieWidgetProps {
   latestCalorie?: {
@@ -14,25 +15,60 @@ interface CalorieWidgetProps {
     goal: string
     activity_level: string
   } | null
+  todayBurned?: number
+  userId?: string
 }
 
-export function CalorieWidget({ latestCalorie }: CalorieWidgetProps) {
-  const getGoalLabel = (goal: string) => {
-    switch (goal) {
-      case 'lose_fast':
-        return 'Weight Loss (Fast)'
-      case 'lose_slow':
-        return 'Weight Loss (Slow)'
-      case 'maintain':
-        return 'Maintain Weight'
-      case 'gain_slow':
-        return 'Weight Gain (Slow)'
-      case 'gain_fast':
-        return 'Weight Gain (Fast)'
-      default:
-        return goal
+export function CalorieWidget({ latestCalorie, todayBurned = 0, userId }: CalorieWidgetProps) {
+  const [consumedCalories, setConsumedCalories] = useState(0)
+  const [customVal, setCustomVal] = useState('')
+
+  // Determine local storage key based on date and userId
+  const now = new Date()
+  const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
+  const storageKey = `fitlogic_consumed_calories_${userId || 'guest'}_${todayStr}`
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem(storageKey)
+      setConsumedCalories(saved ? parseInt(saved, 10) : 0)
+    }
+  }, [userId, storageKey])
+
+  const handleAddCalories = (amount: number) => {
+    const newVal = consumedCalories + amount
+    setConsumedCalories(newVal)
+    localStorage.setItem(storageKey, newVal.toString())
+  }
+
+  const handleResetCalories = () => {
+    setConsumedCalories(0)
+    localStorage.removeItem(storageKey)
+  }
+
+  const handleCustomSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    const amount = parseInt(customVal, 10)
+    if (!isNaN(amount) && amount > 0) {
+      handleAddCalories(amount)
+      setCustomVal('')
     }
   }
+
+  const getGoalLabel = (goal: string) => {
+    switch (goal) {
+      case 'lose_fast': return 'Weight Loss (Fast)'
+      case 'lose_slow': return 'Weight Loss (Slow)'
+      case 'maintain': return 'Maintain Weight'
+      case 'gain_slow': return 'Weight Gain (Slow)'
+      case 'gain_fast': return 'Weight Gain (Fast)'
+      default: return goal
+    }
+  }
+
+  const target = latestCalorie?.target_calories || 2000
+  const netCalories = consumedCalories - todayBurned
+  const progressPercent = Math.min(100, Math.round((consumedCalories / target) * 100))
 
   return (
     <Card className="overflow-hidden flex flex-col justify-between h-full border border-border hover:shadow-xs transition-all bg-card text-card-foreground">
@@ -41,34 +77,109 @@ export function CalorieWidget({ latestCalorie }: CalorieWidgetProps) {
           <CardTitle className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2">
             <Flame className="h-5 w-5 text-primary" /> Daily Calories
           </CardTitle>
-          <CardDescription className="text-xs text-muted-foreground">Target daily caloric energy profile</CardDescription>
+          <CardDescription className="text-xs text-muted-foreground">Log meals & view your daily energy balance</CardDescription>
         </div>
       </CardHeader>
-      <CardContent className="pt-4 flex-1">
+      
+      <CardContent className="pt-4 flex-1 space-y-4">
         {latestCalorie ? (
-          <div className="space-y-4">
-            <div className="flex items-baseline justify-between">
-              <div className="text-4xl font-semibold tracking-tight text-foreground">
-                {latestCalorie.target_calories} <span className="text-sm font-semibold text-muted-foreground">kcal/day</span>
+          <>
+            {/* Calorie Progress Bar */}
+            <div className="space-y-2">
+              <div className="flex justify-between items-baseline">
+                <span className="text-2xl font-bold tracking-tight text-foreground">
+                  {consumedCalories} <span className="text-xs font-semibold text-muted-foreground">/ {target} kcal</span>
+                </span>
+                <span className="text-xs font-semibold text-primary">{progressPercent}%</span>
               </div>
-              <div className="text-[10px] bg-primary/10 border border-primary/20 text-primary font-semibold px-2 py-0.5 rounded-full uppercase">
-                {getGoalLabel(latestCalorie.goal).split(' ')[0]}
+              <div className="h-2 w-full bg-secondary rounded-full overflow-hidden">
+                <div 
+                  className="bg-primary h-full transition-all duration-300 rounded-full"
+                  style={{ width: `${progressPercent}%` }}
+                />
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 pt-2 text-sm border-t border-border">
-              <div>
-                <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">Basal Metabolic (BMR)</p>
-                <p className="font-semibold text-foreground mt-0.5">{latestCalorie.bmr} kcal</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">TDEE (Active Target)</p>
-                <p className="font-semibold text-foreground mt-0.5">{latestCalorie.tdee} kcal</p>
+            {/* Quick Logging Buttons */}
+            <div className="space-y-2">
+              <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Log Food / Meal Intake</p>
+              <div className="flex flex-wrap gap-2">
+                <Button 
+                  onClick={() => handleAddCalories(200)}
+                  variant="outline" 
+                  size="sm"
+                  className="h-8 text-xs font-semibold rounded-lg hover:bg-muted/80 cursor-pointer"
+                >
+                  +200 kcal
+                </Button>
+                <Button 
+                  onClick={() => handleAddCalories(500)}
+                  variant="outline" 
+                  size="sm"
+                  className="h-8 text-xs font-semibold rounded-lg hover:bg-muted/80 cursor-pointer"
+                >
+                  +500 kcal
+                </Button>
+                
+                <form onSubmit={handleCustomSubmit} className="flex gap-1 flex-1 min-w-[120px]">
+                  <Input 
+                    type="number"
+                    placeholder="Custom kcal"
+                    value={customVal}
+                    onChange={(e) => setCustomVal(e.target.value)}
+                    className="h-8 text-xs rounded-lg bg-background border-border"
+                  />
+                  <Button 
+                    type="submit"
+                    variant="outline" 
+                    size="sm"
+                    className="h-8 px-2 rounded-lg cursor-pointer"
+                  >
+                    <Plus className="h-3.5 w-3.5" />
+                  </Button>
+                </form>
               </div>
             </div>
-          </div>
+
+            {/* Calories Balance Grid */}
+            <div className="pt-3 border-t border-border space-y-2">
+              <div className="flex justify-between items-center">
+                <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Today's Energy Balance</p>
+                {consumedCalories > 0 && (
+                  <button 
+                    onClick={handleResetCalories}
+                    className="text-[10px] text-muted-foreground hover:text-destructive flex items-center gap-1 transition-colors font-medium cursor-pointer"
+                  >
+                    <RotateCcw className="h-3 w-3" /> Reset Food
+                  </button>
+                )}
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <div className="bg-secondary/40 p-2 rounded-lg border border-border/50">
+                  <span className="text-[10px] text-muted-foreground block font-medium">Food Intake</span>
+                  <span className="font-semibold text-foreground">+{consumedCalories} kcal</span>
+                </div>
+                <div className="bg-secondary/40 p-2 rounded-lg border border-border/50">
+                  <span className="text-[10px] text-muted-foreground block font-medium">Workout Burn</span>
+                  <span className="font-semibold text-destructive">-{todayBurned} kcal</span>
+                </div>
+                <div className="bg-secondary/40 p-2 rounded-lg border border-border/50 col-span-2 flex justify-between items-center">
+                  <div>
+                    <span className="text-[10px] text-muted-foreground block font-medium">Net Calories</span>
+                    <span className="font-semibold text-foreground">{netCalories} kcal</span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-[10px] text-muted-foreground block font-medium">Remaining Budget</span>
+                    <span className={`font-semibold ${target - consumedCalories >= 0 ? 'text-primary' : 'text-destructive'}`}>
+                      {target - consumedCalories} kcal
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
         ) : (
-          <div className="flex flex-col items-center justify-center text-center py-6 space-y-3">
+          <div className="flex flex-col items-center justify-center text-center py-8 space-y-3">
             <div className="h-10 w-10 rounded-full bg-muted border border-border flex items-center justify-center text-muted-foreground">
               <Flame className="h-5 w-5" />
             </div>
@@ -77,6 +188,7 @@ export function CalorieWidget({ latestCalorie }: CalorieWidgetProps) {
           </div>
         )}
       </CardContent>
+      
       <CardFooter className="border-t border-border bg-muted/30 p-4">
         <Link href="/dashboard/calorie" className="w-full">
           <Button variant="ghost" className="w-full text-xs font-semibold text-primary hover:text-primary-focus hover:bg-muted justify-between cursor-pointer">
