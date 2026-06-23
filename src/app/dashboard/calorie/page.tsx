@@ -12,6 +12,7 @@ import { Label } from '@/components/ui/label'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { motion, AnimatePresence } from 'framer-motion'
+import { NutritionGlossary } from '@/components/dashboard/NutritionGlossary'
 
 interface CalorieRecord {
   id: string
@@ -507,13 +508,47 @@ export default function CaloriePage() {
 
   const handleCalculate = (e: React.FormEvent) => {
     e.preventDefault()
+
+    if (!age) {
+      toast.error("Usia wajib diisi.")
+      return
+    }
+    if (!height) {
+      toast.error("Tinggi badan harus diisi.")
+      return
+    }
+    if (!weight) {
+      toast.error("Berat badan harus diisi.")
+      return
+    }
+    if (!targetWeight) {
+      toast.error("Target berat badan harus diisi.")
+      return
+    }
+    if (!goal) {
+      toast.error("Silakan pilih tujuan diet terlebih dahulu.")
+      return
+    }
+
     const a = parseInt(age)
     const h = parseFloat(height)
     const w = parseFloat(weight)
     const tw = parseFloat(targetWeight)
 
-    if (isNaN(a) || isNaN(h) || isNaN(w) || isNaN(tw) || a <= 0 || h <= 0 || w <= 0 || tw <= 0) {
-      toast.error('Please enter valid positive numbers for all fields')
+    if (isNaN(a) || a < 10 || a > 100) {
+      toast.error("Usia tidak realistis. Masukkan nilai antara 10 sampai 100 tahun.")
+      return
+    }
+    if (isNaN(h) || h < 100 || h > 230) {
+      toast.error("Tinggi badan tidak realistis. Masukkan nilai antara 100 sampai 230 cm.")
+      return
+    }
+    if (isNaN(w) || w < 30 || w > 250) {
+      toast.error("Berat badan tidak realistis. Masukkan nilai antara 30 sampai 250 kg.")
+      return
+    }
+    if (isNaN(tw) || tw < 30 || tw > 250) {
+      toast.error("Target berat badan tidak realistis. Masukkan nilai antara 30 sampai 250 kg.")
       return
     }
 
@@ -1115,6 +1150,10 @@ export default function CaloriePage() {
             </CardContent>
           </Card>
         </div>
+      </div>
+      
+      <div className="mt-8">
+        <NutritionGlossary />
       </div>
     </PageContainer>
   )

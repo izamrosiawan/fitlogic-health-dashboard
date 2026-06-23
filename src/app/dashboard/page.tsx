@@ -6,9 +6,11 @@ import { WelcomeSection } from '@/components/dashboard/WelcomeSection'
 import { BmiWidget } from '@/components/dashboard/BmiWidget'
 import { CalorieWidget } from '@/components/dashboard/CalorieWidget'
 import { WorkoutWidget } from '@/components/dashboard/WorkoutWidget'
-import { ProgressOverview } from '@/components/dashboard/ProgressOverview'
+import { DashboardCharts } from '@/components/dashboard/DashboardCharts'
+import { NutritionGlossary } from '@/components/dashboard/NutritionGlossary'
 import { PageContainer } from '@/components/layout/PageContainer'
-import { Loader2, User, Activity, Flame, Dumbbell, TrendingUp } from 'lucide-react'
+import { Card } from '@/components/ui/card'
+import { Loader2, User, Activity, Flame, Dumbbell, TrendingUp, Target } from 'lucide-react'
 
 export default function DashboardPage() {
   const supabase = createClient()
@@ -20,6 +22,8 @@ export default function DashboardPage() {
   const [totalDuration, setTotalDuration] = useState(0)
   const [totalCalories, setTotalCalories] = useState(0)
   const [todayBurnedCalories, setTodayBurnedCalories] = useState(0)
+  const [currentWeight, setCurrentWeight] = useState(70)
+  const [targetWeight, setTargetWeight] = useState(65)
   const [userId, setUserId] = useState<string>('')
   const [chartData, setChartData] = useState<any[]>([])
 
@@ -57,6 +61,14 @@ export default function DashboardPage() {
           .order('recorded_at', { ascending: false })
           .limit(1)
         setLatestCalorie(calorieData?.[0] || null)
+
+        // Populate weight metrics for projection chart
+        if (profile) {
+          if (profile.weight) setCurrentWeight(profile.weight)
+          if (profile.target_weight) setTargetWeight(profile.target_weight)
+        } else if (bmiData?.[0]) {
+          setCurrentWeight(bmiData[0].weight)
+        }
 
         // Fetch workouts from the last 7 days (trailing)
         const oneWeekAgo = new Date()
@@ -208,6 +220,45 @@ export default function DashboardPage() {
           </div>
         </div>
 
+        {/* Academic Report Summary Metrics Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Card BMR */}
+          <Card className="border border-border bg-card text-card-foreground p-5 space-y-2 hover:shadow-xs transition-all">
+            <div className="flex items-center gap-2">
+              <Flame className="h-4.5 w-4.5 text-primary" />
+              <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Basal Metabolic Rate (BMR)</h4>
+            </div>
+            <p className="text-3xl font-bold tracking-tight text-foreground">
+              {latestCalorie ? `${latestCalorie.bmr} kcal` : '--'}
+            </p>
+            <p className="text-[10px] text-muted-foreground leading-snug">Kebutuhan kalori dasar untuk mempertahankan hidup organ tubuh saat istirahat total.</p>
+          </Card>
+
+          {/* Card TDEE */}
+          <Card className="border border-border bg-card text-card-foreground p-5 space-y-2 hover:shadow-xs transition-all">
+            <div className="flex items-center gap-2">
+              <Activity className="h-4.5 w-4.5 text-blue-500" />
+              <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Energy Expenditure (TDEE)</h4>
+            </div>
+            <p className="text-3xl font-bold tracking-tight text-foreground">
+              {latestCalorie ? `${latestCalorie.tdee} kcal` : '--'}
+            </p>
+            <p className="text-[10px] text-muted-foreground leading-snug">Kebutuhan kalori harian total disesuaikan dengan perkiraan level aktivitas fisik Anda.</p>
+          </Card>
+
+          {/* Card Target Kalori */}
+          <Card className="border border-border bg-card text-card-foreground p-5 space-y-2 hover:shadow-xs transition-all">
+            <div className="flex items-center gap-2">
+              <Target className="h-4.5 w-4.5 text-emerald-500" />
+              <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Target Kalori Harian</h4>
+            </div>
+            <p className="text-3xl font-bold tracking-tight text-foreground">
+              {latestCalorie ? `${latestCalorie.target_calories} kcal` : '--'}
+            </p>
+            <p className="text-[10px] text-muted-foreground leading-snug">Rekomendasi asupan energi harian untuk mencapai berat badan target secara bertahap.</p>
+          </Card>
+        </div>
+
         {/* Widgets Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <BmiWidget latestBmi={latestBmi} />
@@ -223,8 +274,21 @@ export default function DashboardPage() {
           />
         </div>
 
-        {/* Analytics Trailing Chart */}
-        <ProgressOverview data={chartData} />
+        {/* Report Visualization Charts Section */}
+        <div className="space-y-4">
+          <div>
+            <h3 className="text-sm font-semibold tracking-tight text-foreground">Visualisasi Progres & Analitik Rekomendasi Diet</h3>
+            <p className="text-xs text-muted-foreground">Grafik pemantauan kecocokan kalori, pembagian zat makro gizi, dan proyeksi berat badan target.</p>
+          </div>
+          <DashboardCharts 
+            latestCalorie={latestCalorie}
+            currentWeight={currentWeight}
+            targetWeight={targetWeight}
+          />
+        </div>
+
+        {/* Nutrition Glossary (Edukasi Gizi) */}
+        <NutritionGlossary />
       </div>
     </PageContainer>
   )

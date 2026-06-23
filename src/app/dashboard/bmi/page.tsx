@@ -85,11 +85,42 @@ export default function BmiPage() {
 
   const handleCalculate = (e: React.FormEvent) => {
     e.preventDefault()
+    
+    if (!height) {
+      toast.error("Tinggi badan harus diisi.")
+      return
+    }
+    if (!weight) {
+      toast.error("Berat badan harus diisi.")
+      return
+    }
+
     const h = parseFloat(height)
     const w = parseFloat(weight)
 
-    if (isNaN(h) || isNaN(w) || h <= 0 || w <= 0) {
-      toast.error('Please enter valid positive numbers')
+    if (isNaN(h) || h <= 0) {
+      toast.error("Tinggi badan harus lebih dari 0 cm.")
+      return
+    }
+    if (isNaN(w) || w <= 0) {
+      toast.error("Berat badan harus lebih dari 0 kg.")
+      return
+    }
+
+    // Realistic bounds check based on unit selection
+    let checkHeightCm = h
+    let checkWeightKg = w
+    if (unit === 'imperial') {
+      checkHeightCm = h * 2.54
+      checkWeightKg = w * 0.453592
+    }
+
+    if (checkHeightCm < 100 || checkHeightCm > 230) {
+      toast.error("Tinggi badan tidak realistis. Masukkan nilai antara 100 sampai 230 cm.")
+      return
+    }
+    if (checkWeightKg < 30 || checkWeightKg > 250) {
+      toast.error("Berat badan tidak realistis. Masukkan nilai antara 30 sampai 250 kg.")
       return
     }
 
